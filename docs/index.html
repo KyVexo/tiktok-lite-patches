@@ -1,53 +1,364 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Parches independientes para TikTok Lite 47.8.15 compatibles con Morphe.">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>TikTok Lite Patches</title>
-<link rel="stylesheet" href="site.css">
-<script src="site.js" defer></script>
+<meta content="Parches de Morphe para TikTok Lite 47.8.15." name="description"/>
+<meta content="TikTok Lite Patches" property="og:title"/>
+<meta content="TikTok Lite, a tu manera." property="og:description"/>
+<meta content="img/inicio.jpg" property="og:image"/>
+<link href="img/icono.png" rel="icon"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0b1220;
+    --bg-2: #0f1a2e;
+    --card: #131f35;
+    --card-2: #182844;
+    --line: #22355a;
+    --text: #eef2f8;
+    --muted: #9fb0c8;
+    --amber: #ffb43a;
+    --amber-2: #ff9f1c;
+    --teal: #19e3b1;
+    --cyan: #3fd3ff;
+    --navy: #0b1f3a;
+    --sea: #0e6e7a;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 400 16px/1.6 Roboto, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--amber); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
+
+  /* ---- top bar ---- */
+  .top {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(11, 18, 32, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; color: var(--text); }
+  .brand img { width: 34px; height: 34px; border-radius: 9px; }
+  .brand b { color: var(--amber); font-weight: 700; }
+  .brand:hover { text-decoration: none; }
+  .nav { display: flex; gap: 22px; font-size: 15px; }
+  .nav a { color: var(--muted); }
+  .nav a:hover { color: var(--text); text-decoration: none; }
+
+  /* ---- hero ---- */
+  .hero {
+    background:
+      radial-gradient(900px 420px at 85% -10%, rgba(255, 180, 58, 0.18), transparent 60%),
+      linear-gradient(160deg, var(--navy), var(--sea));
+    border-bottom: 1px solid var(--line);
+  }
+  .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; padding: 72px 0 80px; }
+  .eyebrow { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; font-weight: 500; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--amber); background: rgba(255, 180, 58, 0.12); padding: 6px 12px; border-radius: 999px; }
+  h1 { font-size: clamp(38px, 6vw, 62px); line-height: 1.05; margin: 18px 0 16px; font-weight: 900; letter-spacing: -0.02em; }
+  h1 span { color: var(--amber); }
+  .lead { font-size: 19px; color: #d6e2f2; max-width: 34em; margin: 0 0 28px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 999px;
+    font-weight: 700; font-size: 16px; border: 1px solid transparent; cursor: pointer;
+  }
+  .btn:hover { text-decoration: none; filter: brightness(1.06); }
+  .btn.primary { background: var(--amber); color: #1b1203; }
+  .btn.ghost { border-color: rgba(255, 255, 255, 0.28); color: var(--text); }
+  .hero-note { margin-top: 18px; font-size: 14px; color: #b9c8dc; }
+  .tv {
+    border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+    aspect-ratio: 16 / 9; background: #000;
+  }
+  .tv img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+  /* ---- live strip ---- */
+  .strip { margin-top: -38px; position: relative; z-index: 2; }
+  .strip .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px;
+  }
+  .stat .n { font-size: 30px; font-weight: 900; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .stat .l { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .stat .n.amber { color: var(--amber); }
+
+  section { padding: 84px 0 0; scroll-margin-top: 48px; }
+  h2 { font-size: clamp(28px, 4vw, 38px); margin: 0 0 10px; font-weight: 900; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); margin: 0 0 34px; font-size: 17px; max-width: 46em; }
+
+  /* ---- features ---- */
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .feature {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px;
+  }
+  .feature .ico {
+    width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 14px;
+    background: linear-gradient(140deg, rgba(63, 211, 255, 0.18), rgba(25, 227, 177, 0.12));
+  }
+  .feature .ico svg { width: 24px; height: 24px; }
+  .feature h3 { margin: 0 0 6px; font-size: 18px; }
+  .feature p { margin: 0; color: var(--muted); font-size: 15px; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 700; color: var(--teal); margin-left: 6px; vertical-align: middle; }
+
+  /* ---- gallery ---- */
+  .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  figure { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  figure button { all: unset; display: block; cursor: zoom-in; width: 100%; aspect-ratio: 16 / 9; }
+  figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  figcaption { padding: 14px 18px 16px; }
+  figcaption b { display: block; font-size: 16px; }
+  figcaption span { color: var(--muted); font-size: 14px; }
+  .lightbox {
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88); display: none; place-items: center; z-index: 50; padding: 16px;
+  }
+  .lightbox.open { display: grid; }
+  .lightbox img { max-width: min(1280px, 100%); max-height: 90vh; border-radius: 10px; }
+
+  /* ---- install ---- */
+  .steps { counter-reset: s; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .step { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 22px 24px; position: relative; }
+  .step::before {
+    counter-increment: s; content: counter(s);
+    display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+    background: var(--amber); color: #1b1203; font-weight: 900; margin-bottom: 14px;
+  }
+  .step h3 { margin: 0 0 6px; font-size: 18px; }
+  .step p { margin: 0 0 10px; color: var(--muted); font-size: 15px; }
+  .step p:last-child { margin-bottom: 0; }
+  code { background: var(--bg-2); border: 1px solid var(--line); padding: 2px 7px; border-radius: 6px; font-size: 14px; color: #dfe8f5; white-space: nowrap; }
+  .callout { margin-top: 16px; background: rgba(255, 180, 58, 0.08); border: 1px solid rgba(255, 180, 58, 0.3); border-radius: 14px; padding: 14px 18px; color: #f3dcb2; font-size: 15px; }
+
+  /* ---- stats ---- */
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+  .panel-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .panel-head h3 { margin: 0; font-size: 18px; }
+  .seg { display: inline-flex; background: var(--bg-2); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+  .seg button {
+    all: unset; cursor: pointer; padding: 7px 14px; border-radius: 999px; font-size: 14px; color: var(--muted); font-weight: 500;
+  }
+  .seg button[aria-pressed="true"] { background: var(--card-2); color: var(--text); }
+  .bars { display: grid; gap: 9px; }
+  .bar { display: grid; grid-template-columns: 112px 1fr 52px; align-items: center; gap: 12px; font-size: 14px; }
+  .bar .v { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bar .v.latest { color: var(--text); font-weight: 700; }
+  .bar .track { height: 12px; background: var(--bg-2); border-radius: 999px; overflow: hidden; }
+  .bar .fill { height: 100%; background: linear-gradient(90deg, var(--sea), var(--cyan)); border-radius: 999px; min-width: 2px; }
+  .bar .fill.dev { background: linear-gradient(90deg, #7a5a12, var(--amber)); }
+  .bar .c { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+  .stats-note { color: var(--muted); font-size: 14px; margin: 16px 0 0; }
+  .updated { color: var(--muted); font-size: 13px; }
+
+  /* ---- footer ---- */
+  footer { margin-top: 96px; border-top: 1px solid var(--line); padding: 36px 0 48px; color: var(--muted); font-size: 14px; }
+  footer .cols { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; }
+  footer h4 { color: var(--text); margin: 0 0 8px; font-size: 15px; }
+  footer p { margin: 0 0 8px; }
+  .author { display: flex; gap: 14px; align-items: center; }
+  .author svg { width: 54px; height: 54px; flex: none; }
+  .author b { color: var(--text); font-size: 17px; }
+  .author b span { color: var(--amber); }
+
+  @media (max-width: 900px) {
+    .hero .wrap { grid-template-columns: 1fr; padding: 48px 0 72px; gap: 32px; }
+    .strip .grid { grid-template-columns: repeat(2, 1fr); }
+    .features, .steps { grid-template-columns: 1fr 1fr; }
+    .nav { display: none; }
+  }
+  @media (max-width: 600px) {
+    .features, .steps, .gallery, footer .cols { grid-template-columns: 1fr; }
+    .bar { grid-template-columns: 92px 1fr 40px; }
+    section { padding-top: 64px; }
+    .top .btn { padding: 10px 14px; font-size: 14px; }
+  }
+
+  .top .wrap { min-height: 64px; height: auto; padding-block: 10px; flex-wrap: wrap; }
+  .top-actions { display: flex; align-items: center; gap: 12px; }
+  .language-picker { display: flex; align-items: center; gap: 8px; color: var(--text); }
+  .language-picker svg { width: 21px; height: 21px; flex: none; }
+  .language-picker select { color: var(--text); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 10px 12px; font: inherit; max-width: 155px; cursor: pointer; }
+  a:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid var(--amber); outline-offset: 4px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .lightbox-close { position: absolute; inset-block-start: 16px; inset-inline-end: 16px; border: 1px solid var(--line); border-radius: 999px; padding: 10px 18px; color: var(--text); background: var(--card); font: inherit; cursor: pointer; }
+  [dir="rtl"] .tag { margin-left: 0; margin-right: 6px; }
+  [dir="rtl"] .bar .c { text-align: left; }
+  [dir="rtl"] h1 { letter-spacing: normal; }
+  .feature, .step, .hero .wrap > div, footer .cols > div { min-width: 0; }
+  .stat { min-width: 0; }
+  .stat .n { overflow-wrap: anywhere; }
+  #s-updated { font-size: clamp(18px, 4vw, 30px); }
+  .seg { flex-wrap: wrap; max-width: 100%; border-radius: 20px; }
+  code { white-space: normal; overflow-wrap: anywhere; }
+  h1, h2, h3, p, figcaption { overflow-wrap: break-word; }
+  @media (max-width: 1100px) { .nav { display: none; } }
+  @media (max-width: 600px) { .top .brand { font-size: 17px; gap: 7px; } .top-actions > .btn { display: none; } .language-picker select { max-width: 130px; font-size: 14px; } .top .wrap { gap: 10px; } }
+
+.lite-preview img{width:100%;height:auto;object-fit:contain}
+#gallery img{height:auto;max-height:460px;object-fit:contain;background:#101622}
+</style>
 </head>
 <body>
-<header class="wrap top"><a class="brand" href="./"><span class="mark" aria-hidden="true">♪</span> TikTok Lite Patches</a><nav aria-label="Principal"><a href="#features" data-i="features">Funciones</a><a href="#install" data-i="install">Instalación</a><label class="language"><span class="sr" data-i="language">Idioma</span><select id="language"><option value="es">Español</option><option value="en">English</option></select></label></nav></header>
-<main>
-<section class="wrap hero">
+<header class="top">
+<div class="wrap">
+<a class="brand" href="#"><img alt="" src="img/icono.png"/><span dir="ltr">TikTok <b>Lite</b> Patches</span></a>
+<nav class="nav">
+<a data-i18n="nav.features" href="#funciones">Funciones</a>
+<a data-i18n="nav.gallery" href="#capturas">Capturas</a>
+<a data-i18n="nav.install" href="#instalar">Instalar</a>
+<a data-i18n="nav.stats" href="#estadisticas">Estadísticas</a>
+</nav>
+<div class="top-actions"><label class="language-picker" for="site-language"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" viewbox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><ellipse cx="12" cy="12" rx="4" ry="9"></ellipse><path d="M3 12h18"></path></svg><span class="sr-only" data-i18n="language.label">Idioma</span><select dir="ltr" id="site-language"><option lang="es" value="es">Español</option><option lang="en" value="en">English</option></select></label><a class="btn ghost" href="https://github.com/jair1c/tiktok-lite-patches">GitHub</a></div></div>
+<p aria-live="polite" class="sr-only" id="language-status" role="status"></p></header>
+<div class="hero">
+<div class="wrap">
 <div>
-<p class="context">ANDROID · TIKTOK LITE 47.8.15</p>
-<h1 data-i="title">TikTok Lite, <em>a tu manera.</em></h1>
-<p class="intro" data-i="intro">Filtra anuncios del feed, guarda videos sin marca de agua cuando haya una fuente limpia y controla ambos parches desde Ajustes del mod.</p>
-<div class="actions"><a class="primary" data-i="add" href="https://morphe.software/add-source?github=jair1c/tiktok-lite-patches&amp;name=TikTok%20Lite%20Patches">Agregar a Morphe</a><a class="secondary" data-i="releases" href="https://github.com/jair1c/tiktok-lite-patches/releases">Ver versiones</a></div>
-<p class="meta" data-i="meta">Versión preliminar v0.1.0-dev.21 · Probada en Galaxy A36</p>
+<span class="eyebrow" data-i18n="hero.eyebrow">Parches de Morphe · Android</span>
+<h1 data-i18n="hero.title">TikTok Lite, <span>a tu manera.</span></h1>
+<p class="lead" data-i18n="hero.lead">Filtra anuncios del feed y guarda videos sin marca de agua cuando exista una fuente limpia. Controla los dos parches desde Ajustes del mod.</p>
+<div class="cta">
+<a class="btn primary" data-i18n="hero.add" href="https://morphe.software/add-source?github=jair1c/tiktok-lite-patches&amp;name=TikTok%20Lite%20Patches">＋ Agregar a Morphe</a>
+<a class="btn ghost" data-i18n="hero.install" href="#instalar">Cómo instalarlo</a>
 </div>
-<figure class="hero-phone"><img src="img/panel.png" alt="Ajustes del mod con tarjetas de Feed y Descargas" width="1080" height="2340" data-alt="panelAlt"></figure>
-</section>
-<section id="features" class="wrap section">
-<h2 data-i="features">Funciones</h2>
-<div class="cards"><article><h3 data-i="feed">Feed</h3><p data-i="feedCopy">Oculta anuncios detectados en dos recorridos del feed y muestra cuántos se filtraron en la sesión.</p></article><article><h3 data-i="downloads">Descargas</h3><p data-i="downloadsCopy">Prefiere la versión sin marca de agua para las descargas permitidas cuando está disponible.</p></article><article><h3 data-i="settings">Ajustes del mod</h3><p data-i="settingsCopy">Controla los parches desde Ajustes y privacidad. El panel sigue el tema de esa pantalla y admite ocho idiomas.</p></article></div>
-</section>
-<section class="wrap section">
-<h2 data-i="gallery">Así se ve</h2>
-<div class="gallery">
-<figure><a href="img/native.jpg"><img src="img/native.jpg" width="360" height="780" loading="lazy" alt="Entrada de Ajustes del mod dentro de Ajustes y privacidad" data-alt="nativeAlt"></a><figcaption data-i="nativeCaption">Entrada en Ajustes y privacidad</figcaption></figure>
-<figure><a href="img/about.png"><img src="img/about.png" width="1080" height="2340" loading="lazy" alt="Cuadro Acerca de con el avatar y la versión del parche" data-alt="aboutAlt"></a><figcaption data-i="aboutCaption">Acerca de TikTok Lite Patches</figcaption></figure>
+<p class="hero-note" data-i18n="hero.note">Para TikTok Lite <b dir="ltr" id="hero-target">47.8.15</b> · Versión <b dir="ltr" id="hero-version">—</b></p>
+</div>
+<div class="tv lite-preview"><img alt="Panel de Ajustes del mod en un Galaxy A36" data-i18n-alt="hero.alt" src="img/inicio.jpg"/></div>
+</div>
+</div>
+<div class="wrap strip">
+<div class="grid">
+<div class="stat"><div class="n amber" id="s-total">—</div><div class="l" data-i18n="stats.total">descargas en total</div></div>
+<div class="stat"><div class="n" id="s-latest">—</div><div class="l" data-i18n="stats.current" id="s-latest-l">de la versión actual</div></div>
+<div class="stat"><div class="n" id="s-releases">—</div><div class="l" data-i18n="stats.stable">versiones estables</div></div>
+<div class="stat"><div class="n" id="s-updated">—</div><div class="l" data-i18n="stats.updated">última actualización</div></div>
+</div>
+</div>
+<main class="wrap">
+<section id="funciones">
+<h2 data-i18n="features.title">Qué trae</h2>
+<p class="sub" data-i18n="features.intro">Dos parches configurables desde <b>Ajustes del mod</b>, dentro de Ajustes y privacidad.</p>
+<div class="features">
+<div class="feature">
+<div class="ico"><svg fill="none" stroke="#3fd3ff" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24"><rect height="12" rx="3" width="18" x="3" y="6"></rect><path d="M4 4l16 16" stroke="#ff4e45"></path></svg></div>
+<h3 data-i18n="feature.ads.title">Sin anuncios</h3>
+<p data-i18n="feature.ads.body">Filtra anuncios detectados en dos recorridos del feed.</p>
+</div>
+<div class="feature">
+<div class="ico"><svg fill="none" stroke="#ffe27a" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 16h18"></path><path d="M8 16h8" stroke="#ff4e45" stroke-width="3"></path><path d="M7 12c2-5 8-5 10 0"></path><path d="M15 11l2 1.5 1.5-2"></path></svg></div>
+<h3 data-i18n="feature.sponsor.title">Sin marca de agua</h3>
+<p data-i18n="feature.sponsor.body">Usa la fuente limpia cuando está disponible para una descarga permitida.</p>
+</div>
+<div class="feature">
+<div class="ico"><svg fill="none" stroke="#3fd3ff" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M9 4h7c1.5 0 2.3.8 2.5 2l1 6c.2 1.2-.6 2-1.8 2H14l.8 3.5c.2 1-.5 1.8-1.4 1.5L10 14H9z"></path><path d="M5 4h3v10H5z"></path></svg></div>
+<h3 data-i18n="feature.dislikes.title">Ajustes del mod</h3>
+<p data-i18n="feature.dislikes.body">Dos interruptores persistentes en una pantalla dedicada.</p>
+</div>
+<div class="feature">
+<div class="ico"><svg fill="none" stroke="#19e3b1" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24"><rect height="18" rx="2" width="8" x="8" y="3"></rect><path d="M4 5l16 14" stroke="#ff4e45"></path></svg></div>
+<h3 data-i18n="feature.shorts.title">Contador por sesión</h3>
+<p data-i18n="feature.shorts.body">Consulta cuántas entradas de publicidad filtró el mod.</p>
+</div>
+<div class="feature">
+<div class="ico"><svg fill="none" stroke="#3fd3ff" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24"><rect height="12" rx="2" width="18" x="3" y="4"></rect><path d="M10 8l4 2-4 2z" fill="#ffe27a" stroke="#ffe27a"></path><path d="M5 20h14"></path><circle cx="9" cy="20" fill="#19e3b1" r="1.6" stroke="none"></circle></svg></div>
+<h3 data-i18n="feature.player.title">Idioma y tema</h3>
+<p data-i18n="feature.player.body">Ocho idiomas y el tema de Ajustes y privacidad cuando abres el panel desde ahí.</p>
+</div>
+<div class="feature">
+<div class="ico"><svg fill="none" stroke="#ffb43a" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M10 8h4l1 13H9z"></path><path d="M9 8l3-4 3 4"></path><path d="M15 9l6-3v7z" fill="#ffb43a" fill-opacity=".35"></path></svg></div>
+<h3 data-i18n="feature.brand.title">Acerca de</h3>
+<p data-i18n="feature.brand.body">Consulta la versión del parche y abre el repositorio desde el panel.</p>
+</div>
+
+
+
 </div>
 </section>
-<section id="install" class="wrap section">
-<h2 data-i="install">Instalación</h2>
-<p class="lede" data-i="installIntro">El flujo verificado usa Morphe Desktop con los APK divididos de TikTok Lite 47.8.15 para ARM64. La instalación completa desde Morphe Manager sigue en pruebas.</p>
-<ol class="steps">
-<li data-i="step1">Descarga el bundle .mpp de GitHub Releases y consigue los APK originales de tu instalación.</li>
-<li data-i="step2">Aplica Hide feed ads a base.apk. En otra ejecución, aplica los otros dos parches a split_df_edit_filter.apk.</li>
-<li data-i="step3">Conserva los nombres de los módulos y usa el mismo identificador y certificado para todo el conjunto.</li>
-</ol>
-<a class="secondary" data-i="guide" href="https://github.com/jair1c/tiktok-lite-patches#instalación-probada-con-morphe-desktop">Ver guía en GitHub</a>
+<section id="capturas">
+<h2 data-i18n="gallery.title">Así se ve</h2>
+<p class="sub" data-i18n="gallery.intro">Capturas reales de TikTok Lite Patches en un Galaxy A36.</p>
+<div class="gallery" id="gallery">
+<figure><button data-full="img/panel.png" data-gallery-key="gallery.home.title"><img alt="" loading="lazy" src="img/panel.png"/></button>
+<figcaption><b data-i18n="gallery.home.title">Ajustes del mod</b><span data-i18n="gallery.home.body">Tarjetas de Feed y Descargas.</span></figcaption></figure>
+<figure><button data-full="img/native.jpg" data-gallery-key="gallery.settings.title"><img alt="" loading="lazy" src="img/native.jpg"/></button>
+<figcaption><b data-i18n="gallery.settings.title">Ajustes y privacidad</b><span data-i18n="gallery.settings.body">Entrada a Ajustes del mod.</span></figcaption></figure>
+<figure><button data-full="img/dev21.jpg" data-gallery-key="gallery.sponsor.title"><img alt="" loading="lazy" src="img/dev21.jpg"/></button>
+<figcaption><b data-i18n="gallery.sponsor.title">Menú nativo</b><span data-i18n="gallery.sponsor.body">El menú termina en Ayuda en la prueba sin sesión.</span></figcaption></figure>
+<figure><button data-full="img/about.png" data-gallery-key="gallery.dislikes.title"><img alt="" loading="lazy" src="img/about.png"/></button>
+<figcaption><b data-i18n="gallery.dislikes.title">Acerca de</b><span data-i18n="gallery.dislikes.body">Avatar y versión del parche.</span></figcaption></figure>
+</div>
 </section>
-<section class="wrap section">
-<h2 data-i="stats">Descargas del bundle</h2>
-<p id="stats-message" data-i="loading" role="status">Consultando GitHub…</p>
-<ul id="stats-list" class="stats"></ul>
+<section id="instalar">
+<h2 data-i18n="install.title">Cómo instalarlo</h2>
+<p class="sub" data-i18n="install.intro">Necesitas TikTok Lite <b>47.8.15</b> (<code>com.zhiliaoapp.musically.go</code>, código 470815). El repositorio distribuye el archivo de parches .mpp. Consigue los APK originales desde tu instalación de <a href="https://play.google.com/store/apps/details?id=com.zhiliaoapp.musically.go">Google Play</a>.</p>
+<div class="steps">
+<div class="step">
+<h3 data-i18n="step.source.title">Agrega la fuente</h3>
+<p data-i18n="step.source.add">Pulsa <a href="https://morphe.software/add-source?github=jair1c/tiktok-lite-patches&amp;name=TikTok%20Lite%20Patches">Agregar a Morphe</a> o añade esta fuente manualmente:</p>
+<p><code>github.com/jair1c/tiktok-lite-patches</code></p>
+<p data-i18n="step.source.directory">También aparece en <a href="https://morphe-patches.software/?app=com.zhiliaoapp.musically.go">morphe-patches.software</a>.</p>
+</div>
+<div class="step">
+<h3 data-i18n="step.patch.title">Parchea los módulos</h3>
+<p data-i18n="step.patch.apk">En Morphe Desktop, aplica Hide feed ads a base.apk. En otra ejecución, aplica los otros dos parches a split_df_edit_filter.apk.</p>
+</div>
+<div class="step">
+<h3 data-i18n="step.open.title">Instala la copia parcheada</h3>
+<p data-i18n="step.open.install">Conserva los nombres de los módulos y usa el mismo paquete y certificado para todo el conjunto. La instalación completa desde Manager sigue en pruebas.</p>
+</div>
+</div>
+<div class="callout" data-i18n="install.settings">Abre <b>Ajustes y privacidad → Ajustes del mod</b> para controlar los parches.</div>
+</section>
+<section id="estadisticas">
+<h2 data-i18n="stats.title">Estadísticas</h2>
+<p class="sub" data-i18n="stats.intro">Descargas de los archivos .mpp registradas en GitHub.</p>
+<div class="panel">
+<div class="panel-head">
+<h3 data-i18n="stats.chart">Descargas por versión</h3>
+<div aria-label="Qué versiones mostrar" class="seg" data-i18n-aria="stats.chart" role="group">
+<button aria-pressed="false" data-filter="stable" data-i18n="filter.stable" type="button">Estables</button>
+<button aria-pressed="false" data-filter="dev" data-i18n="filter.dev" type="button">De prueba</button>
+<button aria-pressed="true" data-filter="all" data-i18n="filter.all" type="button">Todas</button>
+</div>
+</div>
+<div class="bars" id="bars"><p class="updated">Cargando datos de GitHub…</p></div>
+<p class="stats-note" data-i18n="stats.note">Las descargas incluyen actualizaciones; estas cifras no representan usuarios únicos. <span class="updated" id="updated"></span></p>
+</div>
 </section>
 </main>
-<footer class="wrap foot"><span data-i="footer">Proyecto independiente de TikTok y Morphe · Jair1c</span><a href="https://github.com/jair1c/tiktok-lite-patches">GitHub</a></footer>
-</body>
+<footer>
+<div class="wrap cols">
+<div>
+<div class="author">
+<svg aria-hidden="true" viewbox="0 0 108 108">
+<circle cx="54" cy="54" fill="#ffb43a" r="52"></circle><circle cx="54" cy="54" fill="#000" r="47"></circle>
+<g transform="translate(40 50) scale(-0.78 0.78)"><ellipse cx="0" cy="2" fill="#fff" rx="14" ry="11"></ellipse><circle cx="-3" cy="5" fill="#000" r="6"></circle><circle cx="-1" cy="3" fill="#fff" r="1.8"></circle><path d="M-18 4 L18 -6 L18 -14 L-18 -14 Z" fill="#000"></path></g>
+<g transform="translate(68 50) scale(0.78 0.78)"><ellipse cx="0" cy="2" fill="#fff" rx="14" ry="11"></ellipse><circle cx="-3" cy="5" fill="#000" r="6"></circle><circle cx="-1" cy="3" fill="#fff" r="1.8"></circle><path d="M-18 4 L18 -6 L18 -14 L-18 -14 Z" fill="#000"></path></g>
+</svg>
+<div data-i18n="footer.author"><b>Gabriel <span>Jair</span></b><br/>Creador de TikTok Lite Patches · <a href="https://github.com/jair1c">github.com/jair1c</a></div>
+</div>
+<p data-i18n="footer.license" style="margin-top:18px">Código bajo licencia GPLv3.</p>
+</div>
+<div>
+<h4 data-i18n="footer.notice">Aviso</h4>
+<p data-i18n="footer.disclaimer">Proyecto independiente, compatible con Morphe. TikTok Lite y sus marcas pertenecen a sus respectivos titulares.</p>
+<p data-i18n="footer.credits"><a href="https://github.com/jair1c/tiktok-lite-patches/issues">Reportar un problema</a>.</p>
+</div>
+</div>
+</footer>
+<div aria-label="Captura ampliada" aria-modal="true" class="lightbox" data-i18n-aria="gallery.dialog" id="lightbox" role="dialog"><button class="lightbox-close" data-i18n="gallery.close" type="button">Cerrar captura</button><img alt=""/></div>
+<script defer="" src="site.js"></script></body>
 </html>
