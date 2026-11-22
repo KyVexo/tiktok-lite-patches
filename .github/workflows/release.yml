@@ -37,7 +37,7 @@ jobs:
           tag="$GITHUB_REF_NAME"
           version="${tag#v}"
           bundle="patches-$version.mpp"
-          jq -n --arg version "$version" --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+          jq -n --arg version "$version" --arg date "$(date -u +%Y-%m-%dT%H:%M:%S)" \
             --arg url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$tag/$bundle" \
             --arg key "$(cat morphe-signing.pub)" \
             '{version:$version,created_at:$date,description:"See the GitHub release notes.",download_url:$url,signature_download_url:"",public_key:$key}' > patches-bundle.json
