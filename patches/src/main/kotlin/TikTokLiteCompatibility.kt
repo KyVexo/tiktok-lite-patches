@@ -7,15 +7,12 @@ internal val tikTokLite4782Target = AppTarget(
     version = "47.8.2",
     versionCode = 470802,
     minSdk = 21,
-    isExperimental = true,
+    isExperimental = false,
     description = "APKMirror nodpi APK. LIVE playback module is unavailable in this build.",
 )
 
 internal val tikTokLiteCompatibility = Compatibility(
     name = "TikTok Lite",
     packageName = "com.zhiliaoapp.musically.go",
-    targets = listOf(
-        AppTarget(version = "47.8.15", minSdk = 21),
-        tikTokLite4782Target,
-    ),
+    targets = listOf(tikTokLite4782Target),
 )
