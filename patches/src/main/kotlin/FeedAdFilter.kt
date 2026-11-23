@@ -12,7 +12,6 @@ import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
-import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 
 private const val feedList = "Lcom/ss/android/ugc/aweme/minilite/feed/data/bean/FeedItemList;"
 
@@ -35,13 +34,6 @@ private object MainWindowFocus : Fingerprint(
     name = "onWindowFocusChanged",
     returnType = "V",
     parameters = listOf("Z"),
-)
-
-private object NativeShortcutRefresh : Fingerprint(
-    definingClass = "LX/0iL;",
-    name = "LF",
-    returnType = "V",
-    parameters = listOf("Landroid/content/Context;", "Ljava/util/List;"),
 )
 
 private val settingsManifest = resourcePatch {
@@ -72,16 +64,6 @@ val feedAdFilter = bytecodePatch(
     execute {
         MainWindowFocus.method.addInstructions(0, """
             invoke-static/range {p0 .. p1}, Lapp/tiktoklitepatches/extension/ModSettings;->onWindowFocus(Landroid/app/Activity;Z)V
-        """)
-        val shortcuts = NativeShortcutRefresh.method
-        val nativeRegistration = shortcuts.instructions.withIndex().single { (_, instruction) ->
-            val reference = (instruction as? ReferenceInstruction)?.reference as? MethodReference
-            reference?.definingClass == "Landroid/content/pm/ShortcutManager;" &&
-                reference.name == "setDynamicShortcuts"
-        }.index
-        check(shortcuts.instructions[nativeRegistration + 1].opcode == Opcode.MOVE_RESULT)
-        shortcuts.addInstructions(nativeRegistration + 2, """
-            invoke-static/range {p0 .. p0}, Lapp/tiktoklitepatches/extension/ModSettings;->registerShortcut(Landroid/content/Context;)V
         """)
         for ((target, listType) in listOf(FeedAdapter.method to feedList, FullFeedAdapter.method to fullFeedList)) {
             val (index, instruction) = target.instructions.withIndex().single { (_, candidate) ->

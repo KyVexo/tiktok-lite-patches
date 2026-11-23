@@ -5,16 +5,19 @@ import static app.tiktoklitepatches.extension.ModStrings.Text.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.os.Build;
+import android.view.View;
+import android.content.ContextWrapper;
+
+import java.util.Collections;
 
 
 public final class ModSettings {
-    private static final String ACTION = "app.tiktoklitepatches.OPEN_SETTINGS";
+    static final String PROFILE_GESTURE = "launcher_shortcut";
+    private static final String OLD_SHORTCUT_ID = "lite_mod_settings";
     private static final String ADS = "hide_ads";
     private static final String DOWNLOAD = "clean_downloads";
     private static volatile SharedPreferences preferences;
@@ -24,46 +27,49 @@ public final class ModSettings {
 
     public static void initialize(Context context) {
         preferences = context.getSharedPreferences("tiktok_lite_patches", Context.MODE_PRIVATE);
+        removeOldShortcut(context);
     }
 
     public static void onWindowFocus(Activity activity, boolean focused) {
         if (!focused) return;
-        preferences = activity.getSharedPreferences("tiktok_lite_patches", Context.MODE_PRIVATE);
-        Intent intent = activity.getIntent();
-        if (intent != null && ACTION.equals(intent.getAction())) {
-            intent.setAction(Intent.ACTION_MAIN);
-            activity.getWindow().getDecorView().post(() -> {
-                if (!activity.isFinishing()) show(activity);
-            });
-        }
+        initialize(activity);
+
 
     }
 
-    public static void registerShortcut(Context activity) {
-        if (Build.VERSION.SDK_INT < 30) return;
-        ShortcutManager manager = activity.getSystemService(ShortcutManager.class);
-        if (manager == null) return;
-        ModStrings strings = ModStrings.forContext(activity);
-        String label = strings.get(SETTINGS);
-        if (manager.getDynamicShortcuts().stream().anyMatch(s -> s.getId().equals("lite_mod_settings")
-                && label.contentEquals(s.getShortLabel()))) {
-            return;
-        }
-        Intent intent = new Intent(ACTION).setClass(activity, ModSettingsActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        ShortcutInfo shortcut = new ShortcutInfo.Builder(activity, "lite_mod_settings")
-                .setShortLabel(label)
-                .setActivity(new ComponentName(activity.getPackageName(), "com.zhiliaoapp.musically.go.mini.MainActivity"))
-                .setIcon(android.graphics.drawable.Icon.createWithResource(activity, android.R.drawable.ic_menu_preferences))
-                .setRank(0)
-                .setIntent(intent)
-                .build();
-        try {
-            manager.pushDynamicShortcut(shortcut);
+    public static void bindProfileGesture(View tab, String key) {
+        if (!"USER".equals(key) || tab.isLongClickable()) return;
+        initialize(tab.getContext());
+        tab.setOnLongClickListener(view -> {
+            if (!profileGestureEnabled()) return false;
+            Context context = view.getContext();
+            while (context instanceof ContextWrapper) {
+                if (context instanceof Activity) {
+                    Activity activity = (Activity) context;
+                    if (activity.isFinishing() || activity.isDestroyed()) return false;
+                    activity.startActivity(new Intent(activity, ModSettingsActivity.class));
+                    return true;
+                }
+                Context base = ((ContextWrapper) context).getBaseContext();
+                if (base == context) break;
+                context = base;
+            }
+            return false;
+        });
+    }
 
-        } catch (IllegalArgumentException | IllegalStateException ignored) {
-            // Some launchers restrict dynamic shortcuts.
+    private static void removeOldShortcut(Context context) {
+        if (Build.VERSION.SDK_INT < 25) return;
+        ShortcutManager manager = context.getSystemService(ShortcutManager.class);
+        if (manager != null && manager.getDynamicShortcuts().stream()
+                .anyMatch(shortcut -> OLD_SHORTCUT_ID.equals(shortcut.getId()))) {
+            manager.removeDynamicShortcuts(Collections.singletonList(OLD_SHORTCUT_ID));
         }
+    }
+
+    static boolean profileGestureEnabled() {
+        SharedPreferences current = preferences;
+        return current == null || current.getBoolean(PROFILE_GESTURE, true);
     }
 
     public static boolean hideAds() {

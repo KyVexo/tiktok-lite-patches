@@ -6,7 +6,7 @@ Parches compatibles con Morphe para **TikTok Lite 47.8.15**, paquete `com.zhilia
 | --- | --- | --- |
 | Hide feed ads | `base.apk` | Filtra anuncios en dos recorridos del feed e instala la extensión de Ajustes del mod que usan los demás parches. |
 | Prefer clean source for video downloads | `split_df_edit_filter.apk` | Prefiere la fuente de reproducción para las descargas permitidas. Si falta esa fuente, usa la selección original. |
-| Open mod settings from profile | `split_df_edit_filter.apk` | Añade Ajustes del mod a Ajustes y privacidad y oculta la sección nativa Acerca de cuando reconoce su estructura. |
+| Open mod settings from profile | `split_df_edit_filter.apk` | Añade Ajustes del mod a Ajustes y privacidad, oculta la sección nativa Acerca de cuando reconoce su estructura y permite abrir el panel manteniendo pulsado Perfil (Yo). |
 
 ## Instalación probada con Morphe Desktop
 

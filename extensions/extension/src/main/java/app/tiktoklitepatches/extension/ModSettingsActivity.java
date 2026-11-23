@@ -72,6 +72,10 @@ public final class ModSettingsActivity extends Activity {
         addSwitch(downloads, strings.get(CLEAN_DOWNLOADS), strings.get(DOWNLOAD_DESCRIPTION),
                 "clean_downloads", ModSettings.cleanDownloads());
 
+        LinearLayout shortcuts = settingsCard(page, strings.get(SHORTCUTS));
+        addSwitch(shortcuts, strings.get(PROFILE_ENTRY), strings.get(PROFILE_DESCRIPTION),
+                ModSettings.PROFILE_GESTURE, ModSettings.profileGestureEnabled());
+
         LinearLayout about = settingsCard(page, strings.get(ABOUT));
         action(about, strings.get(ABOUT_TITLE), false, this::showAbout);
     }
@@ -225,8 +229,9 @@ public final class ModSettingsActivity extends Activity {
         int[][] states = {{android.R.attr.state_checked}, {}};
         control.setThumbTintList(new ColorStateList(states, new int[]{ACCENT, muted}));
         control.setTrackTintList(new ColorStateList(states, new int[]{0x88FE2C55, border}));
-        control.setOnCheckedChangeListener((view, enabled) ->
-                getSharedPreferences("tiktok_lite_patches", MODE_PRIVATE).edit().putBoolean(key, enabled).apply());
+        control.setOnCheckedChangeListener((view, enabled) -> {
+            getSharedPreferences("tiktok_lite_patches", MODE_PRIVATE).edit().putBoolean(key, enabled).apply();
+        });
         row.addView(control);
         page.addView(row);
     }

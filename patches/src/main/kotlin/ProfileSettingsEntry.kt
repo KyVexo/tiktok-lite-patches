@@ -15,6 +15,13 @@ private object SparkResume : Fingerprint(
     parameters = emptyList(),
 )
 
+private object BindNavigationTab : Fingerprint(
+    definingClass = "LX/GIu;",
+    name = "LCI",
+    returnType = "V",
+    parameters = listOf("LX/H3b;", "LX/Gwq;", "Z", "I"),
+)
+
 @Suppress("unused")
 val profileSettingsEntry = bytecodePatch(
     name = "Open mod settings from profile",
@@ -27,6 +34,13 @@ val profileSettingsEntry = bytecodePatch(
         targets = listOf(AppTarget(version = "47.8.15", minSdk = 21)),
     ))
     execute {
+        val bind = BindNavigationTab.method
+        check(bind.implementation!!.registerCount in 6..16)
+        bind.addInstructions(0, """
+            iget-object v0, p2, LX/Gwq;->L:Ljava/lang/String;
+            invoke-static {p1, v0}, Lapp/tiktoklitepatches/extension/ModSettings;->bindProfileGesture(Landroid/view/View;Ljava/lang/String;)V
+        """)
+
         val method = SparkResume.method
         val returns = method.instructions.indices.filter { method.instructions[it].opcode == Opcode.RETURN_VOID }
         check(returns.isNotEmpty())

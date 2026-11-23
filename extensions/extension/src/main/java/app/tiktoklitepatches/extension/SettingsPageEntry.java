@@ -52,9 +52,9 @@ public final class SettingsPageEntry {
         button.setGravity(Gravity.CENTER);
         button.setMinHeight(dp(activity, 48));
         button.setPaddingRelative(dp(activity, 16), dp(activity, 8), dp(activity, 16), dp(activity, 8));
-        button.setOnClickListener(view -> readTheme(activity, original, light -> launch(activity, light)));
 
         FrameLayout footer = new FrameLayout(activity);
+        footer.setVisibility(View.GONE);
         footer.setPadding(dp(activity, 20), dp(activity, 8), dp(activity, 20), dp(activity, 10));
         footer.setOnApplyWindowInsetsListener((view, insets) -> {
             int bottom = Build.VERSION.SDK_INT >= 30
@@ -67,11 +67,15 @@ public final class SettingsPageEntry {
         footer.addView(button, new FrameLayout.LayoutParams(-1, -2));
         container.addView(footer, new LinearLayout.LayoutParams(-1, -2));
         content.addView(container, new FrameLayout.LayoutParams(-1, -1));
-        styleEntry(activity, footer, button, usesLightTheme(activity));
-        NativeAboutSection.hideWhenReady(original);
         original.postDelayed(() -> {
             if (original.isAttachedToWindow()) {
-                readTheme(activity, original, light -> styleEntry(activity, footer, button, light));
+                readTheme(activity, original, light -> {
+                    styleEntry(activity, footer, button, light);
+                    button.setOnClickListener(view -> launch(activity, light));
+                    footer.setVisibility(View.VISIBLE);
+                    footer.requestApplyInsets();
+                    NativeAboutSection.hideWhenReady(original);
+                });
             }
         }, 500);
     }
