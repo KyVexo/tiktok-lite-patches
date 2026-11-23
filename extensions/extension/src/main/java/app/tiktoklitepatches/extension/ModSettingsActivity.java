@@ -42,9 +42,9 @@ public final class ModSettingsActivity extends Activity {
         super.onCreate(state);
         ModSettings.initialize(this);
         strings = ModStrings.forContext(this);
-        boolean systemLight = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
-                != Configuration.UI_MODE_NIGHT_YES;
-        light = getIntent().getBooleanExtra(EXTRA_LIGHT_THEME, systemLight);
+        light = getIntent().hasExtra(EXTRA_LIGHT_THEME)
+                ? getIntent().getBooleanExtra(EXTRA_LIGHT_THEME, true)
+                : usesLightAppTheme();
         background = light ? 0xFFF5F5F6 : 0xFF101012;
         cardColor = cardColor(light);
         border = borderColor(light);
@@ -55,6 +55,17 @@ public final class ModSettingsActivity extends Activity {
         getWindow().getDecorView().setSystemUiVisibility(light
                 ? View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR : 0);
         showSettings();
+    }
+
+    private boolean usesLightAppTheme() {
+        try {
+            // TikTok Lite resolves its explicit preference and its follow-device mode here.
+            Class<?> theme = Class.forName("X.Ga0", false, getClassLoader());
+            return !Boolean.TRUE.equals(theme.getMethod("LCC").invoke(null));
+        } catch (ReflectiveOperationException | LinkageError ignored) {
+            return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                    != Configuration.UI_MODE_NIGHT_YES;
+        }
     }
 
     private void showSettings() {
