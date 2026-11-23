@@ -1,7 +1,39 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "0.1.0",
+  "version": "0.1.1-dev.1",
   "patches": [
+    {
+      "name": "Clean share links",
+      "description": "Removes known tracking parameters and copies TikTok links without the promotional text.",
+      "default": false,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.zhiliaoapp.musically.go",
+          "name": "TikTok Lite",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "47.8.2",
+              "versionCodes": {
+                "ARM64_V8A": 470802,
+                "ARMEABI_V7A": 470802,
+                "X86_64": 470802,
+                "X86": 470802
+              },
+              "isExperimental": true,
+              "minSdk": 21,
+              "description": "APKMirror nodpi APK. LIVE playback module is unavailable in this build."
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
     {
       "name": "Hide feed ads",
       "description": "Filters sponsored entries flagged by the MiniLite feed model.",
@@ -23,6 +55,18 @@
               "isExperimental": false,
               "minSdk": 21,
               "description": null
+            },
+            {
+              "version": "47.8.2",
+              "versionCodes": {
+                "ARM64_V8A": 470802,
+                "ARMEABI_V7A": 470802,
+                "X86_64": 470802,
+                "X86": 470802
+              },
+              "isExperimental": true,
+              "minSdk": 21,
+              "description": "APKMirror nodpi APK. LIVE playback module is unavailable in this build."
             }
           ]
         }
@@ -50,6 +94,18 @@
               "isExperimental": false,
               "minSdk": 21,
               "description": null
+            },
+            {
+              "version": "47.8.2",
+              "versionCodes": {
+                "ARM64_V8A": 470802,
+                "ARMEABI_V7A": 470802,
+                "X86_64": 470802,
+                "X86": 470802
+              },
+              "isExperimental": true,
+              "minSdk": 21,
+              "description": "APKMirror nodpi APK. LIVE playback module is unavailable in this build."
             }
           ]
         }
@@ -77,6 +133,82 @@
               "isExperimental": false,
               "minSdk": 21,
               "description": null
+            },
+            {
+              "version": "47.8.2",
+              "versionCodes": {
+                "ARM64_V8A": 470802,
+                "ARMEABI_V7A": 470802,
+                "X86_64": 470802,
+                "X86": 470802
+              },
+              "isExperimental": true,
+              "minSdk": 21,
+              "description": "APKMirror nodpi APK. LIVE playback module is unavailable in this build."
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Show exact counts",
+      "description": "Adds an off-by-default switch in Mod settings to display full counts.",
+      "default": true,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.zhiliaoapp.musically.go",
+          "name": "TikTok Lite",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "47.8.2",
+              "versionCodes": {
+                "ARM64_V8A": 470802,
+                "ARMEABI_V7A": 470802,
+                "X86_64": 470802,
+                "X86": 470802
+              },
+              "isExperimental": true,
+              "minSdk": 21,
+              "description": "APKMirror nodpi APK. LIVE playback module is unavailable in this build."
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Stop video looping",
+      "description": "Stops videos at the end instead of automatically repeating them.",
+      "default": false,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.zhiliaoapp.musically.go",
+          "name": "TikTok Lite",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "47.8.2",
+              "versionCodes": {
+                "ARM64_V8A": 470802,
+                "ARMEABI_V7A": 470802,
+                "X86_64": 470802,
+                "X86": 470802
+              },
+              "isExperimental": true,
+              "minSdk": 21,
+              "description": "APKMirror nodpi APK. LIVE playback module is unavailable in this build."
             }
           ]
         }

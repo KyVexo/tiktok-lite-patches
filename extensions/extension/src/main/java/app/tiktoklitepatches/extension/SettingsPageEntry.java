@@ -33,7 +33,12 @@ public final class SettingsPageEntry {
     public static void attach(Activity activity) {
         if (!isSettingsPage(activity)) return;
         FrameLayout content = activity.findViewById(android.R.id.content);
-        if (content == null || content.findViewWithTag(TAG) != null || content.getChildCount() != 1) return;
+        if (content == null || content.getChildCount() != 1) return;
+        LinearLayout existing = content.findViewWithTag(TAG);
+        if (existing != null) {
+            refreshTheme(activity, existing);
+            return;
+        }
 
         View original = content.getChildAt(0);
         content.removeView(original);
@@ -70,14 +75,32 @@ public final class SettingsPageEntry {
         original.postDelayed(() -> {
             if (original.isAttachedToWindow()) {
                 readTheme(activity, original, light -> {
-                    styleEntry(activity, footer, button, light);
-                    button.setOnClickListener(view -> launch(activity, light));
+                    applyTheme(activity, footer, button, light);
                     footer.setVisibility(View.VISIBLE);
                     footer.requestApplyInsets();
                     NativeAboutSection.hideWhenReady(original);
                 });
             }
         }, 500);
+        container.getViewTreeObserver().addOnWindowFocusChangeListener(focused -> {
+            if (focused) refreshTheme(activity, container);
+        });
+    }
+
+    private static void refreshTheme(Activity activity, LinearLayout container) {
+        View original = container.getChildAt(0);
+        FrameLayout footer = (FrameLayout) container.getChildAt(1);
+        Button button = (Button) footer.getChildAt(0);
+        original.postDelayed(() -> {
+            if (original.isAttachedToWindow() && activity.hasWindowFocus()) {
+                readTheme(activity, original, light -> applyTheme(activity, footer, button, light));
+            }
+        }, 250);
+    }
+
+    private static void applyTheme(Activity activity, FrameLayout footer, Button button, boolean light) {
+        styleEntry(activity, footer, button, light);
+        button.setOnClickListener(view -> launch(activity, light));
     }
 
     private static void styleEntry(Activity activity, FrameLayout footer, Button button, boolean light) {
@@ -139,7 +162,13 @@ public final class SettingsPageEntry {
         try {
             Object spark = activity.getClass().getMethod("LIILLL").invoke(activity);
             if (spark == null) return false;
-            String schema = (String) spark.getClass().getMethod("LIIIL").invoke(spark);
+            String schema;
+            try {
+                schema = (String) spark.getClass().getMethod("LIIIL").invoke(spark);
+            } catch (NoSuchMethodException ignored) {
+                // 47.8.2 exposes the Spark schema with its query parameters through LJIII.
+                schema = (String) spark.getClass().getMethod("LJIII").invoke(spark);
+            }
             if (schema == null || schema.isEmpty()) return false;
             Uri uri = Uri.parse(schema);
             if ("settings".equals(uri.getQueryParameter("roma_page_key"))) return true;
