@@ -14,7 +14,7 @@ final class ModStrings {
         HIDE_LIVE, LIVE_DESCRIPTION, HIDE_PHOTO_POSTS, PHOTO_POSTS_DESCRIPTION,
         APPEARANCE, EXACT_COUNTS_TITLE, EXACT_COUNTS_DESCRIPTION, ACCENT_COLOR, ACCENT_DEFAULT, ACCENT_CUSTOM, ACCENT_INVALID,
         PLAYBACK, STOP_LOOPING_TITLE, STOP_LOOPING_DESCRIPTION, SEEKBAR_TITLE, SEEKBAR_DESCRIPTION,
-        PRIVACY, PROFILE_SUGGESTIONS_TITLE, PROFILE_SUGGESTIONS_DESCRIPTION, INBOX_STORY_TRAY_TITLE, INBOX_STORY_TRAY_DESCRIPTION
+        PRIVACY, PROFILE_SUGGESTIONS_TITLE, PROFILE_SUGGESTIONS_DESCRIPTION, INBOX_STORY_TRAY_TITLE, INBOX_STORY_TRAY_DESCRIPTION, STARTUP_PAUSE_TITLE, STARTUP_PAUSE_DESCRIPTION
     }
 
     private final Locale locale;
@@ -40,7 +40,8 @@ final class ModStrings {
                         "Reproducción", "Detener la repetición automática", "Los videos se detienen al terminar.",
                         "Mostrar barra de progreso", "Arrastra la barra para adelantar o retroceder en los videos.",
                         "Privacidad", "Ocultar cuentas recomendadas", "Oculta la sección de cuentas recomendadas en Perfil y Mensajes.",
-                        "Ocultar bandeja de historias", "Oculta la fila de historias y el botón Crea en Mensajes.");
+                        "Ocultar bandeja de historias", "Oculta la fila de historias y el botón Crea en Mensajes.",
+                        "Pausar el primer video al abrir", "Arranca con el primer video de Para ti en pausa.");
             case "pt":
                 return new ModStrings(locale, "Configurações do mod", "Feed", "Ocultar anúncios",
                         "Filtra publicações identificadas como anúncios.", "Anúncios filtrados nesta sessão  ·  %,d",
@@ -53,7 +54,8 @@ final class ModStrings {
                         "Reprodução", "Desativar repetição automática", "Os vídeos param ao chegar ao fim.",
                         "Mostrar barra de progresso", "Arraste a barra para avançar ou voltar nos vídeos.",
                         "Privacidade", "Ocultar contas sugeridas", "Oculta a seção de contas sugeridas no Perfil e em Mensagens.",
-                        "Ocultar bandeja de stories", "Oculta a linha de stories e o botão Criar em Mensagens.");
+                        "Ocultar bandeja de stories", "Oculta a linha de stories e o botão Criar em Mensagens.",
+                        "Pausar o primeiro vídeo ao abrir", "Abre com o primeiro vídeo de Para você em pausa.");
             case "fr":
                 return new ModStrings(locale, "Paramètres du mod", "Fil", "Masquer les publicités",
                         "Filtre les publications identifiées comme publicités.", "Publicités filtrées pendant cette session  ·  %,d",
@@ -66,7 +68,8 @@ final class ModStrings {
                         "Lecture", "Arrêter la répétition automatique", "Les vidéos s’arrêtent à la fin.",
                         "Afficher la barre de progression", "Faites glisser la barre pour avancer ou reculer dans les vidéos.",
                         "Confidentialité", "Masquer les comptes suggérés", "Masque la section des comptes suggérés dans le profil et les messages.",
-                        "Masquer le bandeau des stories", "Masque la rangée des stories et le bouton Créer dans les messages.");
+                        "Masquer le bandeau des stories", "Masque la rangée des stories et le bouton Créer dans les messages.",
+                        "Mettre en pause la première vidéo", "Met la première vidéo du fil Pour toi en pause au démarrage.");
             case "de":
                 return new ModStrings(locale, "Mod-Einstellungen", "Feed", "Werbung ausblenden",
                         "Filtert Beiträge, die als Werbung gekennzeichnet sind.", "Gefilterte Anzeigen in dieser Sitzung  ·  %,d",
@@ -79,7 +82,8 @@ final class ModStrings {
                         "Wiedergabe", "Automatische Wiederholung stoppen", "Videos halten am Ende an.",
                         "Fortschrittsleiste anzeigen", "Ziehe die Leiste, um in Videos vor- oder zurückzuspringen.",
                         "Datenschutz", "Vorgeschlagene Konten ausblenden", "Blendet vorgeschlagene Konten im Profil und in Nachrichten aus.",
-                        "Story-Leiste ausblenden", "Blendet die Story-Leiste und die Schaltfläche Erstellen in Nachrichten aus.");
+                        "Story-Leiste ausblenden", "Blendet die Story-Leiste und die Schaltfläche Erstellen in Nachrichten aus.",
+                        "Erstes Video beim Start pausieren", "Pausiert beim Start das erste Video in Für dich.");
             case "it":
                 return new ModStrings(locale, "Impostazioni del mod", "Feed", "Nascondi gli annunci",
                         "Filtra i post identificati come annunci.", "Annunci filtrati in questa sessione  ·  %,d",
@@ -92,7 +96,8 @@ final class ModStrings {
                         "Riproduzione", "Interrompi la ripetizione automatica", "I video si fermano alla fine.",
                         "Mostra barra di avanzamento", "Trascina la barra per avanzare o tornare indietro nei video.",
                         "Privacy", "Nascondi gli account suggeriti", "Nasconde gli account suggeriti nel profilo e nei messaggi.",
-                        "Nascondi la barra delle storie", "Nasconde la riga delle storie e il pulsante Crea nei messaggi.");
+                        "Nascondi la barra delle storie", "Nasconde la riga delle storie e il pulsante Crea nei messaggi.",
+                        "Metti in pausa il primo video", "All’avvio mette in pausa il primo video in Per te.");
             case "id":
             case "in":
                 return new ModStrings(locale, "Pengaturan mod", "Feed", "Sembunyikan iklan",
@@ -106,7 +111,8 @@ final class ModStrings {
                         "Pemutaran", "Hentikan pengulangan otomatis", "Video berhenti saat selesai.",
                         "Tampilkan bilah progres", "Geser bilah untuk maju atau mundur dalam video.",
                         "Privasi", "Sembunyikan akun yang disarankan", "Sembunyikan bagian akun yang disarankan di Profil dan Pesan.",
-                        "Sembunyikan bilah cerita", "Sembunyikan baris cerita dan tombol Buat di Pesan.");
+                        "Sembunyikan bilah cerita", "Sembunyikan baris cerita dan tombol Buat di Pesan.",
+                        "Jeda video pertama saat dibuka", "Menjeda video pertama di Untuk Anda saat aplikasi dibuka.");
             case "ja":
                 return new ModStrings(locale, "Mod設定", "フィード", "広告を非表示",
                         "広告として識別された投稿を除外します。", "このセッションで除外した広告  ·  %,d",
@@ -119,7 +125,8 @@ final class ModStrings {
                         "再生", "自動リピートを停止", "動画の再生が最後で停止します。",
                         "シークバーを表示", "バーをドラッグして動画を早送りしたり巻き戻したりできます。",
                         "プライバシー", "おすすめのアカウントを非表示", "プロフィールとメッセージのおすすめアカウント欄を非表示にします。",
-                        "ストーリートレイを非表示", "メッセージのストーリー欄と作成ボタンを非表示にします。");
+                        "ストーリートレイを非表示", "メッセージのストーリー欄と作成ボタンを非表示にします。",
+                        "起動時に最初の動画を一時停止", "起動時に「おすすめ」の最初の動画を一時停止します。");
             default:
                 return new ModStrings(Locale.ENGLISH, "Mod settings", "Feed", "Hide ads",
                         "Filters posts identified as ads.", "Ads filtered this session  ·  %,d",
@@ -132,7 +139,8 @@ final class ModStrings {
                         "Playback", "Stop automatic video looping", "Videos stop when they reach the end.",
                         "Show video seekbar", "Drag the bar to move forward or backward in videos.",
                         "Privacy", "Hide suggested accounts", "Hides the suggested accounts section in Profile and Inbox.",
-                        "Hide story tray", "Hides the stories row and Create button in Inbox.");
+                        "Hide story tray", "Hides the stories row and Create button in Inbox.",
+                        "Pause first video on launch", "Pauses the first For You video at startup.");
         }
     }
 

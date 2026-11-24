@@ -111,7 +111,8 @@ public final class ModSettingsActivity extends Activity {
 
         boolean loopingAvailable = ModSettings.stopVideoLoopingAvailable();
         boolean seekbarAvailable = ModSettings.seekbarAvailable();
-        if (loopingAvailable || seekbarAvailable) {
+        boolean startupPauseAvailable = ModSettings.startupPauseAvailable();
+        if (loopingAvailable || seekbarAvailable || startupPauseAvailable) {
             LinearLayout playback = settingsCard(page, strings.get(PLAYBACK));
             if (loopingAvailable) {
                 addSwitch(playback, strings.get(STOP_LOOPING_TITLE), strings.get(STOP_LOOPING_DESCRIPTION),
@@ -120,6 +121,10 @@ public final class ModSettingsActivity extends Activity {
             if (seekbarAvailable) {
                 addSwitch(playback, strings.get(SEEKBAR_TITLE), strings.get(SEEKBAR_DESCRIPTION),
                         ModSettings.SHOW_SEEKBAR, ModSettings.seekbarEnabled());
+            }
+            if (startupPauseAvailable) {
+                addSwitch(playback, strings.get(STARTUP_PAUSE_TITLE), strings.get(STARTUP_PAUSE_DESCRIPTION),
+                        ModSettings.PAUSE_FIRST_VIDEO, ModSettings.startupPauseEnabled());
             }
         }
 

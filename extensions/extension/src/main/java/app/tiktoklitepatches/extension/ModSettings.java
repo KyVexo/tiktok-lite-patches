@@ -162,6 +162,34 @@ public final class ModSettings {
         }
     }
 
+    static final String PAUSE_FIRST_VIDEO = "pause_first_video";
+    private static final java.util.concurrent.atomic.AtomicBoolean startupVideoSeen =
+            new java.util.concurrent.atomic.AtomicBoolean();
+
+    static boolean startupPauseAvailable() {
+        return false;
+    }
+
+    static boolean startupPauseEnabled() {
+        SharedPreferences current = preferences;
+        return current != null && current.getBoolean(PAUSE_FIRST_VIDEO, false);
+    }
+
+    public static boolean takeStartupPause(View player) {
+        if (startupVideoSeen.get() || player == null || !player.isShown()) return false;
+        Context context = player.getContext();
+        while (context instanceof ContextWrapper && !(context instanceof Activity)) {
+            Context base = ((ContextWrapper) context).getBaseContext();
+            if (base == context) return false;
+            context = base;
+        }
+        if (!(context instanceof Activity)) return false;
+        android.content.Intent intent = ((Activity) context).getIntent();
+        if (intent == null || !android.content.Intent.ACTION_MAIN.equals(intent.getAction())) return false;
+        initializePreferences(context);
+        return startupVideoSeen.compareAndSet(false, true) && startupPauseEnabled();
+    }
+
     static final String STOP_VIDEO_LOOPING = "stop_video_looping";
 
     static boolean stopVideoLoopingAvailable() {
