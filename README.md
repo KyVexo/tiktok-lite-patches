@@ -22,3 +22,9 @@ La versión de desarrollo está dirigida a **TikTok Lite 47.8.2** (código `4708
 La prueba local se hizo con Morphe Desktop y una instalación por ADB. La instalación completa desde Morphe Manager está pendiente de validación. El parche LIVE no se incluye en 47.8.2 porque ese APK carece del módulo de reproducción usado por la edición anterior.
 
 Este proyecto distribuye código y bundles de parches. Cada usuario aporta su APK original. Proyecto independiente de TikTok y del equipo de Morphe.
+
+## Validación pendiente en Perfil
+
+En TikTok Lite 47.8.2, **Ocultar cuentas recomendadas** ya se probó en Mensajes con el interruptor activado y desactivado, sin reiniciar la app. Las conversaciones y notificaciones quedaron visibles.
+
+La validación visual en **Perfil** sigue pendiente porque las recomendaciones aún no aparecen en la copia `.morphe` del Galaxy. Cuando aparezcan con el interruptor apagado, comprobar que el bloque desaparezca al activarlo y reaparezca al desactivarlo.

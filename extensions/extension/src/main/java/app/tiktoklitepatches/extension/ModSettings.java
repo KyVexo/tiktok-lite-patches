@@ -33,6 +33,10 @@ public final class ModSettings {
     static final int DEFAULT_ACCENT = 0xFFFE2C55;
     private static final String ACCENT_COLOR = "accent_color";
     private static final WeakHashMap<TextView, ColorStateList[]> originalUnreadColors = new WeakHashMap<>();
+    private static final WeakHashMap<View, Boolean> followBackgrounds = new WeakHashMap<>();
+    private static final WeakHashMap<View, ColorStateList[]> messagePopups = new WeakHashMap<>();
+    private static final WeakHashMap<TextView, Boolean> unreadCounts = new WeakHashMap<>();
+    private static final WeakHashMap<View, String> inboxRows = new WeakHashMap<>();
     private static volatile SharedPreferences preferences;
     private static volatile boolean liveFilterAvailable;
 
@@ -59,8 +63,6 @@ public final class ModSettings {
     public static void onWindowFocus(Activity activity, boolean focused) {
         if (!focused) return;
         initialize(activity);
-
-
     }
 
     public static void bindProfileGesture(View tab, String key) {
@@ -103,6 +105,61 @@ public final class ModSettings {
 
     static boolean cleanDownloadsAvailable() {
         return false;
+    }
+
+    static final String HIDE_PROFILE_SUGGESTIONS = "hide_profile_suggestions";
+
+    static boolean profileSuggestionsAvailable() {
+        return false;
+    }
+
+    public static boolean hideProfileSuggestions() {
+        SharedPreferences current = preferences;
+        return current != null && current.getBoolean(HIDE_PROFILE_SUGGESTIONS, false);
+    }
+
+    static final String HIDE_INBOX_STORY_TRAY = "hide_inbox_story_tray";
+
+    static boolean inboxStoryTrayAvailable() {
+        return false;
+    }
+
+    static boolean hideInboxStoryTray() {
+        SharedPreferences current = preferences;
+        return current != null && current.getBoolean(HIDE_INBOX_STORY_TRAY, false);
+    }
+
+    public static boolean hideInboxRow(View row, String key) {
+        String setting;
+        if ("story__skylight".equals(key) && inboxStoryTrayAvailable()) {
+            setting = HIDE_INBOX_STORY_TRAY;
+        } else if (profileSuggestionsAvailable() && isInboxSuggestion(key)) {
+            setting = HIDE_PROFILE_SUGGESTIONS;
+        } else {
+            inboxRows.remove(row);
+            return false;
+        }
+        android.view.ViewParent parent = row.getParent();
+        while (parent instanceof View) {
+            if (((View) parent).getId() == 0x790a059c) {
+                inboxRows.put(row, setting);
+                return setting.equals(HIDE_INBOX_STORY_TRAY) ? hideInboxStoryTray() : hideProfileSuggestions();
+            }
+            parent = parent.getParent();
+        }
+        return false;
+    }
+
+    private static boolean isInboxSuggestion(String key) {
+        // Inbox recommendations use bare user IDs. Conversations use conversation_* keys.
+        return "rec_header".equals(key) || "contact".equals(key) || "facebook".equals(key)
+                || (key != null && !key.isEmpty() && android.text.TextUtils.isDigitsOnly(key));
+    }
+
+    static void refreshInboxRows(String setting) {
+        for (View row : new java.util.ArrayList<>(inboxRows.keySet())) {
+            if (setting.equals(inboxRows.get(row)) && row.isAttachedToWindow()) row.requestLayout();
+        }
     }
 
     static final String STOP_VIDEO_LOOPING = "stop_video_looping";
@@ -161,21 +218,28 @@ public final class ModSettings {
         if (!(content instanceof android.widget.FrameLayout)) return;
         android.widget.FrameLayout frame = (android.widget.FrameLayout) content;
         initializePreferences(frame.getContext());
-        int accent = accentColor();
-        if (accent == DEFAULT_ACCENT) return;
-
-        ColorStateList tint = ColorStateList.valueOf(accent);
         View panel = frame.getChildAt(0);
-        View arrow = frame.findViewById(0x790a07ba);
-        if (panel != null) panel.setBackgroundTintList(tint);
-        if (arrow instanceof android.widget.ImageView) {
-            ((android.widget.ImageView) arrow).setImageTintList(tint);
+        View arrowView = frame.findViewById(0x790a07ba);
+        android.widget.ImageView arrow = arrowView instanceof android.widget.ImageView
+                ? (android.widget.ImageView) arrowView : null;
+        ColorStateList[] original = messagePopups.get(frame);
+        if (original == null) {
+            original = new ColorStateList[]{
+                    panel == null ? null : panel.getBackgroundTintList(),
+                    arrow == null ? null : arrow.getImageTintList()
+            };
+            messagePopups.put(frame, original);
         }
+        int accent = accentColor();
+        ColorStateList tint = ColorStateList.valueOf(accent);
+        if (panel != null) panel.setBackgroundTintList(accent == DEFAULT_ACCENT ? original[0] : tint);
+        if (arrow != null) arrow.setImageTintList(accent == DEFAULT_ACCENT ? original[1] : tint);
     }
 
     public static void tintFollowBackground(View background) {
         if (background == null) return;
         initializePreferences(background.getContext());
+        followBackgrounds.put(background, Boolean.TRUE);
         int accent = accentColor();
         if (background.getBackground() instanceof GradientDrawable) {
             ((GradientDrawable) background.getBackground().mutate()).setColor(accent);
@@ -184,6 +248,7 @@ public final class ModSettings {
 
     public static void tintUnreadCount(TextView count) {
         initializePreferences(count.getContext());
+        unreadCounts.put(count, Boolean.TRUE);
         int accent = accentColor();
         if (accent == DEFAULT_ACCENT) {
             ColorStateList[] original = originalUnreadColors.remove(count);
@@ -231,7 +296,11 @@ public final class ModSettings {
     }
 
     static void setAccentColor(int color) {
+        if (color == accentColor()) return;
         preferences.edit().putInt(ACCENT_COLOR, color).apply();
+        for (View view : new java.util.ArrayList<>(followBackgrounds.keySet())) tintFollowBackground(view);
+        for (View view : new java.util.ArrayList<>(messagePopups.keySet())) tintMessagePopup(view);
+        for (TextView view : new java.util.ArrayList<>(unreadCounts.keySet())) tintUnreadCount(view);
     }
 
     static boolean profileGestureEnabled() {

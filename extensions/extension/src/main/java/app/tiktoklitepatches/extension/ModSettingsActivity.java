@@ -123,6 +123,20 @@ public final class ModSettingsActivity extends Activity {
             }
         }
 
+        boolean suggestionsAvailable = ModSettings.profileSuggestionsAvailable();
+        boolean storyTrayAvailable = ModSettings.inboxStoryTrayAvailable();
+        if (suggestionsAvailable || storyTrayAvailable) {
+            LinearLayout privacy = settingsCard(page, strings.get(PRIVACY));
+            if (suggestionsAvailable) {
+                addSwitch(privacy, strings.get(PROFILE_SUGGESTIONS_TITLE), strings.get(PROFILE_SUGGESTIONS_DESCRIPTION),
+                        ModSettings.HIDE_PROFILE_SUGGESTIONS, ModSettings.hideProfileSuggestions());
+            }
+            if (storyTrayAvailable) {
+                addSwitch(privacy, strings.get(INBOX_STORY_TRAY_TITLE), strings.get(INBOX_STORY_TRAY_DESCRIPTION),
+                        ModSettings.HIDE_INBOX_STORY_TRAY, ModSettings.hideInboxStoryTray());
+            }
+        }
+
         LinearLayout appearance = settingsCard(page, strings.get(APPEARANCE));
         if (ModSettings.exactCountsAvailable()) {
             addSwitch(appearance, strings.get(EXACT_COUNTS_TITLE), strings.get(EXACT_COUNTS_DESCRIPTION),
@@ -375,6 +389,9 @@ public final class ModSettingsActivity extends Activity {
         control.setTrackTintList(new ColorStateList(states, new int[]{0x88000000 | (ModSettings.accentColor() & 0xFFFFFF), border}));
         control.setOnCheckedChangeListener((view, enabled) -> {
             getSharedPreferences("tiktok_lite_patches", MODE_PRIVATE).edit().putBoolean(key, enabled).apply();
+            if (ModSettings.HIDE_PROFILE_SUGGESTIONS.equals(key) || ModSettings.HIDE_INBOX_STORY_TRAY.equals(key)) {
+                ModSettings.refreshInboxRows(key);
+            }
         });
         row.addView(control);
         page.addView(row);
