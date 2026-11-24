@@ -138,7 +138,8 @@ public final class ModSettingsActivity extends Activity {
 
         boolean suggestionsAvailable = ModSettings.profileSuggestionsAvailable();
         boolean storyTrayAvailable = ModSettings.inboxStoryTrayAvailable();
-        if (suggestionsAvailable || storyTrayAvailable) {
+        boolean searchHistoryAvailable = ModSettings.skipSearchHistoryAvailable();
+        if (suggestionsAvailable || storyTrayAvailable || searchHistoryAvailable) {
             LinearLayout privacy = settingsCard(page, strings.get(PRIVACY));
             if (suggestionsAvailable) {
                 addSwitch(privacy, strings.get(PROFILE_SUGGESTIONS_TITLE), strings.get(PROFILE_SUGGESTIONS_DESCRIPTION),
@@ -147,6 +148,10 @@ public final class ModSettingsActivity extends Activity {
             if (storyTrayAvailable) {
                 addSwitch(privacy, strings.get(INBOX_STORY_TRAY_TITLE), strings.get(INBOX_STORY_TRAY_DESCRIPTION),
                         ModSettings.HIDE_INBOX_STORY_TRAY, ModSettings.hideInboxStoryTray());
+            }
+            if (searchHistoryAvailable) {
+                addSwitch(privacy, strings.get(SKIP_SEARCH_HISTORY_TITLE), strings.get(SKIP_SEARCH_HISTORY_DESCRIPTION),
+                        ModSettings.SKIP_SEARCH_HISTORY, ModSettings.skipSearchHistoryEnabled());
             }
         }
 

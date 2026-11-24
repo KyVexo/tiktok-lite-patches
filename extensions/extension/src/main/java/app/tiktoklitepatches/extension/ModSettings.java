@@ -18,9 +18,15 @@ import android.os.Build;
 import android.view.View;
 import android.content.ContextWrapper;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.WeakHashMap;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public final class ModSettings {
     static final String PROFILE_GESTURE = "launcher_shortcut";
@@ -189,6 +195,69 @@ public final class ModSettings {
         if (intent == null || !android.content.Intent.ACTION_MAIN.equals(intent.getAction())) return false;
         initializePreferences(context);
         return startupVideoSeen.compareAndSet(false, true) && startupPauseEnabled();
+    }
+
+    static final String SKIP_SEARCH_HISTORY = "skip_search_history";
+    private static final java.util.regex.Pattern RECENT_SEARCH_KEY =
+            java.util.regex.Pattern.compile("search_history[0-9]*");
+
+    static boolean skipSearchHistoryAvailable() {
+        return false;
+    }
+
+    static boolean skipSearchHistoryEnabled() {
+        SharedPreferences current = preferences;
+        return current != null && current.getBoolean(SKIP_SEARCH_HISTORY, false);
+    }
+
+    public static boolean skipSearchHistoryWrite(String key) {
+        return skipSearchHistoryEnabled() && key != null && RECENT_SEARCH_KEY.matcher(key).matches();
+    }
+
+    public static boolean isSearchHistoryRemoval(List<?> updated, Object stored) {
+        if (updated.isEmpty()) return true;
+        if (!(stored instanceof List<?>)) return false;
+        int index = 0;
+        for (Object entry : (List<?>) stored) {
+            if (Objects.equals(entry, updated.get(index)) && ++index == updated.size()) return true;
+        }
+        return false;
+    }
+
+    public static boolean skipSearchHistoryPageCache(String page) {
+        return "search_home".equals(page) && skipSearchHistoryEnabled();
+    }
+
+    public static boolean correctSearchHistoryEvent(String event) {
+        return "search_history_update".equals(event) && skipSearchHistoryEnabled();
+    }
+
+    public static JSONObject correctedSearchHistoryEvent(List<?> updated, Object stored) {
+        if (isSearchHistoryRemoval(updated, stored)) return null;
+        try {
+            return new JSONObject().put("search_history", searchHistoryArray(stored));
+        } catch (JSONException ignored) {
+            return null;
+        }
+    }
+
+    public static String searchHistoryStorageKey(String userId) {
+        return "search_history" + (userId == null ? "" : userId);
+    }
+
+    public static String replaceCachedSearchHistory(String data, Object storedHistory) {
+        try {
+            JSONObject snapshot = new JSONObject(data);
+            if (!snapshot.has("searchHistoryCache")) return data;
+            snapshot.put("searchHistoryCache", searchHistoryArray(storedHistory));
+            return snapshot.toString();
+        } catch (JSONException ignored) {
+            return data;
+        }
+    }
+
+    private static JSONArray searchHistoryArray(Object stored) {
+        return stored instanceof Collection<?> ? new JSONArray((Collection<?>) stored) : new JSONArray();
     }
 
     static final String STOP_VIDEO_LOOPING = "stop_video_looping";
