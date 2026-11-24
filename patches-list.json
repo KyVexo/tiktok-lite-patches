@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "0.1.1-dev.6",
+  "version": "0.1.1-dev.7",
   "patches": [
     {
       "name": "Clean share links",
@@ -133,6 +133,38 @@
     {
       "name": "Open mod settings from profile",
       "description": "Adds a separate entry to open mod settings from the native settings page.",
+      "default": false,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.zhiliaoapp.musically.go",
+          "name": "TikTok Lite",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "47.8.2",
+              "versionCodes": {
+                "ARM64_V8A": 470802,
+                "ARMEABI_V7A": 470802,
+                "X86_64": 470802,
+                "X86": 470802
+              },
+              "isExperimental": false,
+              "minSdk": 21,
+              "description": "APKMirror nodpi APK. LIVE playback module is unavailable in this build."
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Pause first video on launch",
+      "description": "Adds an off-by-default switch to pause the first For You video on a fresh app launch.",
       "default": false,
       "category": null,
       "compatiblePackages": [
