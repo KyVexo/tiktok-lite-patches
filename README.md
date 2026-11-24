@@ -7,11 +7,11 @@ La versión de desarrollo está dirigida a **TikTok Lite 47.8.2** (código `4708
 | Hide feed ads | Filtra anuncios, muestra un contador de sesión y añade el interruptor opcional para ocultar publicaciones de fotos. |
 | Prefer clean source for video downloads | Prefiere la fuente de reproducción cuando la descarga está permitida y la fuente limpia está disponible. |
 | Open mod settings from profile | Añade Ajustes del mod a Ajustes y privacidad. Mantener pulsado Perfil también abre el panel. |
-| Stop video looping | Detiene el video al terminar. Se selecciona al parchear. |
+| Stop video looping | Añade un interruptor en Reproducción para detener el video al terminar. Viene apagado. |
 | Clean share links | Quita parámetros de seguimiento conocidos y deja solo la URL al usar Copiar enlace. Se selecciona al parchear. |
 | Show exact counts | Añade un interruptor en Apariencia para ver cifras completas en el feed y los perfiles. El interruptor viene apagado. |
 
-**Ajustes del mod → Apariencia** también permite elegir el color de acento del panel mediante muestras o un HEX personalizado. El rosa original es el valor inicial.
+**Ajustes del mod → Apariencia** también permite elegir el color de acento mediante muestras o un HEX personalizado. Se aplica al panel, al botón de seguir del feed y a los contadores y al aviso flotante de Mensajes. El rosa original es el valor inicial.
 
 ## Prueba de la versión de desarrollo
 

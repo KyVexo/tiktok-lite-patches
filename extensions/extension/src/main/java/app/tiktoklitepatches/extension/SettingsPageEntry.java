@@ -3,7 +3,6 @@ package app.tiktoklitepatches.extension;
 import static app.tiktoklitepatches.extension.ModStrings.Text.*;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.graphics.Bitmap;
@@ -100,7 +99,7 @@ public final class SettingsPageEntry {
 
     private static void applyTheme(Activity activity, FrameLayout footer, Button button, boolean light) {
         styleEntry(activity, footer, button, light);
-        button.setOnClickListener(view -> launch(activity, light));
+        button.setOnClickListener(view -> ModSettingsActivity.open(activity, light));
     }
 
     private static void styleEntry(Activity activity, FrameLayout footer, Button button, boolean light) {
@@ -110,7 +109,8 @@ public final class SettingsPageEntry {
         card.setCornerRadius(dp(activity, 18));
         card.setStroke(dp(activity, 1), ModSettingsActivity.borderColor(light));
         button.setBackgroundTintList(null);
-        button.setBackground(new RippleDrawable(ColorStateList.valueOf(0x26FE2C55), card, null));
+        int ripple = (ModSettings.accentColor() & 0xFFFFFF) | 0x26000000;
+        button.setBackground(new RippleDrawable(ColorStateList.valueOf(ripple), card, null));
         button.setTextColor(ModSettingsActivity.accentText(light));
     }
 
@@ -139,11 +139,6 @@ public final class SettingsPageEntry {
             }
         }
         apply.accept(usesLightTheme(activity));
-    }
-
-    private static void launch(Activity activity, boolean light) {
-        activity.startActivity(new Intent(activity, ModSettingsActivity.class)
-                .putExtra(ModSettingsActivity.EXTRA_LIGHT_THEME, light));
     }
 
     private static boolean usesLightTheme(Activity activity) {

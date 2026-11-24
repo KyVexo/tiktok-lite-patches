@@ -47,7 +47,7 @@ public final class ModSettingsActivity extends Activity {
         strings = ModStrings.forContext(this);
         light = getIntent().hasExtra(EXTRA_LIGHT_THEME)
                 ? getIntent().getBooleanExtra(EXTRA_LIGHT_THEME, true)
-                : usesLightAppTheme();
+                : usesLightAppTheme(this);
         background = light ? 0xFFF5F5F6 : 0xFF101012;
         cardColor = cardColor(light);
         border = borderColor(light);
@@ -60,15 +60,22 @@ public final class ModSettingsActivity extends Activity {
         showSettings();
     }
 
-    private boolean usesLightAppTheme() {
+    static void open(Activity source, boolean light) {
+        source.startActivity(new Intent(source, ModSettingsActivity.class)
+                .putExtra(EXTRA_LIGHT_THEME, light));
+    }
+
+    static boolean usesLightAppTheme(Activity source) {
         try {
-            // TikTok Lite resolves its explicit preference and its follow-device mode here.
-            Class<?> theme = Class.forName("X.Ga0", false, getClassLoader());
-            return !Boolean.TRUE.equals(theme.getMethod("LCC").invoke(null));
+            // 47.8.2 resolves the selected appearance, including follow-device mode, here.
+            Class<?> theme = Class.forName("X.K6R", false, source.getClassLoader());
+            Object dark = theme.getMethod("LCC").invoke(null);
+            if (dark instanceof Boolean) return !((Boolean) dark);
         } catch (ReflectiveOperationException | LinkageError ignored) {
-            return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
-                    != Configuration.UI_MODE_NIGHT_YES;
+            // Use the originating activity's configuration if the app resolver is unavailable.
         }
+        return (source.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                != Configuration.UI_MODE_NIGHT_YES;
     }
 
     private void showSettings() {
@@ -95,6 +102,12 @@ public final class ModSettingsActivity extends Activity {
         LinearLayout shortcuts = settingsCard(page, strings.get(SHORTCUTS));
         addSwitch(shortcuts, strings.get(PROFILE_ENTRY), strings.get(PROFILE_DESCRIPTION),
                 ModSettings.PROFILE_GESTURE, ModSettings.profileGestureEnabled());
+
+        if (ModSettings.stopVideoLoopingAvailable()) {
+            LinearLayout playback = settingsCard(page, strings.get(PLAYBACK));
+            addSwitch(playback, strings.get(STOP_LOOPING_TITLE), strings.get(STOP_LOOPING_DESCRIPTION),
+                    ModSettings.STOP_VIDEO_LOOPING, ModSettings.stopVideoLoopingEnabled());
+        }
 
         LinearLayout appearance = settingsCard(page, strings.get(APPEARANCE));
         if (ModSettings.exactCountsAvailable()) {
@@ -280,7 +293,7 @@ public final class ModSettingsActivity extends Activity {
         return accent;
     }
 
-    private static double contrast(int first, int second) {
+    static double contrast(int first, int second) {
         double a = luminance(first) + 0.05;
         double b = luminance(second) + 0.05;
         return Math.max(a, b) / Math.min(a, b);

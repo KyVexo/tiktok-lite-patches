@@ -73,7 +73,7 @@ val feedAdFilter = bytecodePatch(
     default = false,
 ) {
     compatibleWith(tikTokLiteCompatibility)
-    dependsOn(settingsManifest, tikTokLiteExtension)
+    dependsOn(settingsManifest, nativeAccent)
     execute {
         MainWindowFocus.method.addInstructions(0, """
             invoke-static/range {p0 .. p1}, Lapp/tiktoklitepatches/extension/ModSettings;->onWindowFocus(Landroid/app/Activity;Z)V
