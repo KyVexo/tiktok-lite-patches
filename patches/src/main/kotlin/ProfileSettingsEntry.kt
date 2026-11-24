@@ -34,7 +34,9 @@ val profileSettingsEntry = bytecodePatch(
     default = false,
 ) {
     compatibleWith(tikTokLiteCompatibility)
+    dependsOn(modSettingsSupport)
     execute {
+        enableModSetting("profileGestureAvailable")
         if (packageMetadata.versionName == "47.8.15") {
             // In the split build the full feed model is patched in df_edit_filter.
             filterFeedAccessor(fullFeedList, "getItems")

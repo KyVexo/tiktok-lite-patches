@@ -81,32 +81,46 @@ public final class ModSettingsActivity extends Activity {
     private void showSettings() {
         LinearLayout page = page(strings.get(SETTINGS));
 
-        LinearLayout feed = settingsCard(page, strings.get(FEED));
-        addSwitch(feed, strings.get(HIDE_ADS), strings.get(ADS_DESCRIPTION),
-                "hide_ads", ModSettings.hideAds());
-        TextView count = dialogText(strings.get(ADS_COUNT, FeedFilter.removedCount()),
-                13, muted, false);
-        count.setPadding(0, dp(12), 0, 0);
-        feed.addView(count);
-        if (ModSettings.liveFilterAvailable()) {
-            addSwitch(feed, strings.get(HIDE_LIVE), strings.get(LIVE_DESCRIPTION),
-                    ModSettings.LIVE, ModSettings.hideLive());
+        if (ModSettings.feedFilterAvailable()) {
+            LinearLayout feed = settingsCard(page, strings.get(FEED));
+            addSwitch(feed, strings.get(HIDE_ADS), strings.get(ADS_DESCRIPTION),
+                    ModSettings.ADS, ModSettings.hideAds());
+            TextView count = dialogText(strings.get(ADS_COUNT, FeedFilter.removedCount()),
+                    13, muted, false);
+            count.setPadding(0, dp(12), 0, 0);
+            feed.addView(count);
+            if (ModSettings.liveFilterAvailable()) {
+                addSwitch(feed, strings.get(HIDE_LIVE), strings.get(LIVE_DESCRIPTION),
+                        ModSettings.LIVE, ModSettings.hideLive());
+            }
+            addSwitch(feed, strings.get(HIDE_PHOTO_POSTS), strings.get(PHOTO_POSTS_DESCRIPTION),
+                    ModSettings.PHOTO_POSTS, ModSettings.hidePhotoPosts());
         }
-        addSwitch(feed, strings.get(HIDE_PHOTO_POSTS), strings.get(PHOTO_POSTS_DESCRIPTION),
-                ModSettings.PHOTO_POSTS, ModSettings.hidePhotoPosts());
 
-        LinearLayout downloads = settingsCard(page, strings.get(DOWNLOADS));
-        addSwitch(downloads, strings.get(CLEAN_DOWNLOADS), strings.get(DOWNLOAD_DESCRIPTION),
-                "clean_downloads", ModSettings.cleanDownloads());
+        if (ModSettings.cleanDownloadsAvailable()) {
+            LinearLayout downloads = settingsCard(page, strings.get(DOWNLOADS));
+            addSwitch(downloads, strings.get(CLEAN_DOWNLOADS), strings.get(DOWNLOAD_DESCRIPTION),
+                    ModSettings.DOWNLOAD, ModSettings.cleanDownloads());
+        }
 
-        LinearLayout shortcuts = settingsCard(page, strings.get(SHORTCUTS));
-        addSwitch(shortcuts, strings.get(PROFILE_ENTRY), strings.get(PROFILE_DESCRIPTION),
-                ModSettings.PROFILE_GESTURE, ModSettings.profileGestureEnabled());
+        if (ModSettings.profileGestureAvailable()) {
+            LinearLayout shortcuts = settingsCard(page, strings.get(SHORTCUTS));
+            addSwitch(shortcuts, strings.get(PROFILE_ENTRY), strings.get(PROFILE_DESCRIPTION),
+                    ModSettings.PROFILE_GESTURE, ModSettings.profileGestureEnabled());
+        }
 
-        if (ModSettings.stopVideoLoopingAvailable()) {
+        boolean loopingAvailable = ModSettings.stopVideoLoopingAvailable();
+        boolean seekbarAvailable = ModSettings.seekbarAvailable();
+        if (loopingAvailable || seekbarAvailable) {
             LinearLayout playback = settingsCard(page, strings.get(PLAYBACK));
-            addSwitch(playback, strings.get(STOP_LOOPING_TITLE), strings.get(STOP_LOOPING_DESCRIPTION),
-                    ModSettings.STOP_VIDEO_LOOPING, ModSettings.stopVideoLoopingEnabled());
+            if (loopingAvailable) {
+                addSwitch(playback, strings.get(STOP_LOOPING_TITLE), strings.get(STOP_LOOPING_DESCRIPTION),
+                        ModSettings.STOP_VIDEO_LOOPING, ModSettings.stopVideoLoopingEnabled());
+            }
+            if (seekbarAvailable) {
+                addSwitch(playback, strings.get(SEEKBAR_TITLE), strings.get(SEEKBAR_DESCRIPTION),
+                        ModSettings.SHOW_SEEKBAR, ModSettings.seekbarEnabled());
+            }
         }
 
         LinearLayout appearance = settingsCard(page, strings.get(APPEARANCE));

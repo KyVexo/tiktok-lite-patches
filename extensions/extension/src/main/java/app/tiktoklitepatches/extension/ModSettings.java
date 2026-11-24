@@ -25,10 +25,10 @@ import java.util.WeakHashMap;
 public final class ModSettings {
     static final String PROFILE_GESTURE = "launcher_shortcut";
     private static final String OLD_SHORTCUT_ID = "lite_mod_settings";
-    private static final String ADS = "hide_ads";
+    static final String ADS = "hide_ads";
     static final String LIVE = "hide_live";
     static final String PHOTO_POSTS = "hide_photo_posts";
-    private static final String DOWNLOAD = "clean_downloads";
+    static final String DOWNLOAD = "clean_downloads";
     static final String EXACT_COUNTS = "exact_counts";
     static final int DEFAULT_ACCENT = 0xFFFE2C55;
     private static final String ACCENT_COLOR = "accent_color";
@@ -93,6 +93,18 @@ public final class ModSettings {
         }
     }
 
+    static boolean feedFilterAvailable() {
+        return false;
+    }
+
+    static boolean profileGestureAvailable() {
+        return false;
+    }
+
+    static boolean cleanDownloadsAvailable() {
+        return false;
+    }
+
     static final String STOP_VIDEO_LOOPING = "stop_video_looping";
 
     static boolean stopVideoLoopingAvailable() {
@@ -106,6 +118,21 @@ public final class ModSettings {
 
     public static boolean videoLooping(boolean requested) {
         return requested && !stopVideoLoopingEnabled();
+    }
+
+    static final String SHOW_SEEKBAR = "show_video_seekbar";
+
+    static boolean seekbarAvailable() {
+        return false;
+    }
+
+    public static boolean seekbarEnabled() {
+        SharedPreferences current = preferences;
+        return current != null && current.getBoolean(SHOW_SEEKBAR, false);
+    }
+
+    public static boolean seekbarDraftEnabled(boolean requested) {
+        return requested || seekbarEnabled();
     }
 
     static boolean exactCountsAvailable() {
@@ -214,11 +241,11 @@ public final class ModSettings {
 
     public static boolean hideAds() {
         SharedPreferences current = preferences;
-        return current == null || current.getBoolean(ADS, true);
+        return feedFilterAvailable() && (current == null || current.getBoolean(ADS, true));
     }
 
     static boolean liveFilterAvailable() {
-        return liveFilterAvailable;
+        return feedFilterAvailable() && liveFilterAvailable;
     }
 
     static boolean hideLive() {
@@ -228,7 +255,7 @@ public final class ModSettings {
 
     static boolean hidePhotoPosts() {
         SharedPreferences current = preferences;
-        return current != null && current.getBoolean(PHOTO_POSTS, false);
+        return feedFilterAvailable() && current != null && current.getBoolean(PHOTO_POSTS, false);
     }
 
     public static boolean cleanDownloads() {

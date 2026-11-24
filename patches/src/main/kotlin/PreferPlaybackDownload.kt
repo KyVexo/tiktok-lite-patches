@@ -30,7 +30,9 @@ val preferPlaybackDownload = bytecodePatch(
     default = false,
 ) {
     compatibleWith(tikTokLiteCompatibility)
+    dependsOn(modSettingsSupport)
     execute {
+        enableModSetting("cleanDownloadsAvailable")
         val method = if (packageMetadata.versionName == "47.8.2") SaveVideo4782.method else SaveVideo.method
         check(AccessFlags.STATIC.isSet(method.accessFlags))
         check(method.parameterTypes.map { it.toString() }.take(4) == listOf(

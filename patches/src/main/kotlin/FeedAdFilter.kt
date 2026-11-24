@@ -4,8 +4,6 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.instructions
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patcher.patch.resourcePatch
-import app.morphe.patcher.patch.resourceXml
 import app.morphe.patcher.util.addInstructionsAtControlFlowLabel
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
@@ -47,24 +45,6 @@ internal fun filterFeedAccessor(owner: String, accessor: String) {
     }
 }
 
-private object MainWindowFocus : Fingerprint(
-    definingClass = "Lcom/zhiliaoapp/musically/go/mini/MainActivity;",
-    name = "onWindowFocusChanged",
-    returnType = "V",
-    parameters = listOf("Z"),
-)
-
-private val settingsManifest = resourcePatch {
-    execute {
-        resourceXml("AndroidManifest.xml").use { xml ->
-            xml.root.children("application").single().appendChild("activity") {
-                setAttribute("android:name", "app.tiktoklitepatches.extension.ModSettingsActivity")
-                setAttribute("android:exported", "false")
-                setAttribute("android:theme", "@android:style/Theme.DeviceDefault.NoActionBar")
-            }
-        }
-    }
-}
 
 @Suppress("unused")
 val feedAdFilter = bytecodePatch(
@@ -73,11 +53,9 @@ val feedAdFilter = bytecodePatch(
     default = false,
 ) {
     compatibleWith(tikTokLiteCompatibility)
-    dependsOn(settingsManifest, nativeAccent)
+    dependsOn(modSettingsSupport)
     execute {
-        MainWindowFocus.method.addInstructions(0, """
-            invoke-static/range {p0 .. p1}, Lapp/tiktoklitepatches/extension/ModSettings;->onWindowFocus(Landroid/app/Activity;Z)V
-        """)
+        enableModSetting("feedFilterAvailable")
         filterFeedAccessor(feedList, "getItems")
         filterFeedAccessor(feedList, "getAwemeList")
         if (packageMetadata.versionName == "47.8.2") {
