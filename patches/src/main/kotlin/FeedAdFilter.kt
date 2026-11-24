@@ -46,16 +46,9 @@ internal fun filterFeedAccessor(owner: String, accessor: String) {
 }
 
 
-@Suppress("unused")
-val feedAdFilter = bytecodePatch(
-    name = "Hide feed ads",
-    description = "Filters sponsored entries flagged by the MiniLite feed model.",
-    default = false,
-) {
-    compatibleWith(tikTokLiteCompatibility)
+internal val feedFilteringSupport = bytecodePatch {
     dependsOn(modSettingsSupport)
     execute {
-        enableModSetting("feedFilterAvailable")
         filterFeedAccessor(feedList, "getItems")
         filterFeedAccessor(feedList, "getAwemeList")
         if (packageMetadata.versionName == "47.8.2") {
@@ -75,5 +68,31 @@ val feedAdFilter = bytecodePatch(
                 """)
             }
         }
+    }
+}
+
+@Suppress("unused")
+val feedAdFilter = bytecodePatch(
+    name = "Hide feed ads",
+    description = "Filters sponsored entries flagged by the MiniLite feed model.",
+    default = false,
+) {
+    compatibleWith(tikTokLiteCompatibility)
+    dependsOn(feedFilteringSupport)
+    execute {
+        enableModSetting("feedFilterAvailable")
+    }
+}
+
+@Suppress("unused")
+val hideAiLabeledPosts = bytecodePatch(
+    name = "Hide AI-labeled posts",
+    description = "Adds an off-by-default Feed switch to hide posts with TikTok Lite's native AI-generated label.",
+    default = false,
+) {
+    compatibleWith(tikTokLiteCompatibility)
+    dependsOn(feedFilteringSupport)
+    execute {
+        enableModSetting("aiFilterAvailable")
     }
 }

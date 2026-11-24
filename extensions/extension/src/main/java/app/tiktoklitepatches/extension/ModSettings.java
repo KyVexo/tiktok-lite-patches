@@ -27,6 +27,7 @@ public final class ModSettings {
     private static final String OLD_SHORTCUT_ID = "lite_mod_settings";
     static final String ADS = "hide_ads";
     static final String LIVE = "hide_live";
+    static final String AI_LABELED_POSTS = "hide_ai_labeled_posts";
     static final String PHOTO_POSTS = "hide_photo_posts";
     static final String DOWNLOAD = "clean_downloads";
     static final String EXACT_COUNTS = "exact_counts";
@@ -348,6 +349,15 @@ public final class ModSettings {
     static boolean hideLive() {
         SharedPreferences current = preferences;
         return current != null && liveFilterAvailable() && current.getBoolean(LIVE, false);
+    }
+
+    static boolean aiFilterAvailable() {
+        return false;
+    }
+
+    static boolean hideAiLabeledPosts() {
+        SharedPreferences current = preferences;
+        return aiFilterAvailable() && current != null && current.getBoolean(AI_LABELED_POSTS, false);
     }
 
     static boolean hidePhotoPosts() {

@@ -14,7 +14,7 @@ final class ModStrings {
         HIDE_LIVE, LIVE_DESCRIPTION, HIDE_PHOTO_POSTS, PHOTO_POSTS_DESCRIPTION,
         APPEARANCE, EXACT_COUNTS_TITLE, EXACT_COUNTS_DESCRIPTION, ACCENT_COLOR, ACCENT_DEFAULT, ACCENT_CUSTOM, ACCENT_INVALID,
         PLAYBACK, STOP_LOOPING_TITLE, STOP_LOOPING_DESCRIPTION, SEEKBAR_TITLE, SEEKBAR_DESCRIPTION,
-        PRIVACY, PROFILE_SUGGESTIONS_TITLE, PROFILE_SUGGESTIONS_DESCRIPTION, INBOX_STORY_TRAY_TITLE, INBOX_STORY_TRAY_DESCRIPTION, STARTUP_PAUSE_TITLE, STARTUP_PAUSE_DESCRIPTION
+        PRIVACY, PROFILE_SUGGESTIONS_TITLE, PROFILE_SUGGESTIONS_DESCRIPTION, INBOX_STORY_TRAY_TITLE, INBOX_STORY_TRAY_DESCRIPTION, STARTUP_PAUSE_TITLE, STARTUP_PAUSE_DESCRIPTION, HIDE_AI_LABELED, AI_LABELED_DESCRIPTION
     }
 
     private final Locale locale;
@@ -41,7 +41,8 @@ final class ModStrings {
                         "Mostrar barra de progreso", "Arrastra la barra para adelantar o retroceder en los videos.",
                         "Privacidad", "Ocultar cuentas recomendadas", "Oculta la sección de cuentas recomendadas en Perfil y Mensajes.",
                         "Ocultar bandeja de historias", "Oculta la fila de historias y el botón Crea en Mensajes.",
-                        "Pausar el primer video al abrir", "Arranca con el primer video de Para ti en pausa.");
+                        "Pausar el primer video al abrir", "Arranca con el primer video de Para ti en pausa.",
+                        "Ocultar publicaciones etiquetadas como IA", "Oculta publicaciones que TikTok marca como generadas por IA.");
             case "pt":
                 return new ModStrings(locale, "Configurações do mod", "Feed", "Ocultar anúncios",
                         "Filtra publicações identificadas como anúncios.", "Anúncios filtrados nesta sessão  ·  %,d",
@@ -55,7 +56,8 @@ final class ModStrings {
                         "Mostrar barra de progresso", "Arraste a barra para avançar ou voltar nos vídeos.",
                         "Privacidade", "Ocultar contas sugeridas", "Oculta a seção de contas sugeridas no Perfil e em Mensagens.",
                         "Ocultar bandeja de stories", "Oculta a linha de stories e o botão Criar em Mensagens.",
-                        "Pausar o primeiro vídeo ao abrir", "Abre com o primeiro vídeo de Para você em pausa.");
+                        "Pausar o primeiro vídeo ao abrir", "Abre com o primeiro vídeo de Para você em pausa.",
+                        "Ocultar publicações marcadas como IA", "Oculta publicações que o TikTok marca como geradas por IA.");
             case "fr":
                 return new ModStrings(locale, "Paramètres du mod", "Fil", "Masquer les publicités",
                         "Filtre les publications identifiées comme publicités.", "Publicités filtrées pendant cette session  ·  %,d",
@@ -69,7 +71,8 @@ final class ModStrings {
                         "Afficher la barre de progression", "Faites glisser la barre pour avancer ou reculer dans les vidéos.",
                         "Confidentialité", "Masquer les comptes suggérés", "Masque la section des comptes suggérés dans le profil et les messages.",
                         "Masquer le bandeau des stories", "Masque la rangée des stories et le bouton Créer dans les messages.",
-                        "Mettre en pause la première vidéo", "Met la première vidéo du fil Pour toi en pause au démarrage.");
+                        "Mettre en pause la première vidéo", "Met la première vidéo du fil Pour toi en pause au démarrage.",
+                        "Masquer les publications signalées comme IA", "Masque les publications que TikTok signale comme générées par IA.");
             case "de":
                 return new ModStrings(locale, "Mod-Einstellungen", "Feed", "Werbung ausblenden",
                         "Filtert Beiträge, die als Werbung gekennzeichnet sind.", "Gefilterte Anzeigen in dieser Sitzung  ·  %,d",
@@ -83,7 +86,8 @@ final class ModStrings {
                         "Fortschrittsleiste anzeigen", "Ziehe die Leiste, um in Videos vor- oder zurückzuspringen.",
                         "Datenschutz", "Vorgeschlagene Konten ausblenden", "Blendet vorgeschlagene Konten im Profil und in Nachrichten aus.",
                         "Story-Leiste ausblenden", "Blendet die Story-Leiste und die Schaltfläche Erstellen in Nachrichten aus.",
-                        "Erstes Video beim Start pausieren", "Pausiert beim Start das erste Video in Für dich.");
+                        "Erstes Video beim Start pausieren", "Pausiert beim Start das erste Video in Für dich.",
+                        "Als KI-generiert markierte Beiträge ausblenden", "Blendet Beiträge aus, die TikTok als KI-generiert kennzeichnet.");
             case "it":
                 return new ModStrings(locale, "Impostazioni del mod", "Feed", "Nascondi gli annunci",
                         "Filtra i post identificati come annunci.", "Annunci filtrati in questa sessione  ·  %,d",
@@ -97,7 +101,8 @@ final class ModStrings {
                         "Mostra barra di avanzamento", "Trascina la barra per avanzare o tornare indietro nei video.",
                         "Privacy", "Nascondi gli account suggeriti", "Nasconde gli account suggeriti nel profilo e nei messaggi.",
                         "Nascondi la barra delle storie", "Nasconde la riga delle storie e il pulsante Crea nei messaggi.",
-                        "Metti in pausa il primo video", "All’avvio mette in pausa il primo video in Per te.");
+                        "Metti in pausa il primo video", "All’avvio mette in pausa il primo video in Per te.",
+                        "Nascondi i post etichettati come IA", "Nasconde i post che TikTok contrassegna come generati dall’IA.");
             case "id":
             case "in":
                 return new ModStrings(locale, "Pengaturan mod", "Feed", "Sembunyikan iklan",
@@ -112,7 +117,8 @@ final class ModStrings {
                         "Tampilkan bilah progres", "Geser bilah untuk maju atau mundur dalam video.",
                         "Privasi", "Sembunyikan akun yang disarankan", "Sembunyikan bagian akun yang disarankan di Profil dan Pesan.",
                         "Sembunyikan bilah cerita", "Sembunyikan baris cerita dan tombol Buat di Pesan.",
-                        "Jeda video pertama saat dibuka", "Menjeda video pertama di Untuk Anda saat aplikasi dibuka.");
+                        "Jeda video pertama saat dibuka", "Menjeda video pertama di Untuk Anda saat aplikasi dibuka.",
+                        "Sembunyikan postingan berlabel AI", "Sembunyikan postingan yang ditandai TikTok sebagai buatan AI.");
             case "ja":
                 return new ModStrings(locale, "Mod設定", "フィード", "広告を非表示",
                         "広告として識別された投稿を除外します。", "このセッションで除外した広告  ·  %,d",
@@ -126,7 +132,8 @@ final class ModStrings {
                         "シークバーを表示", "バーをドラッグして動画を早送りしたり巻き戻したりできます。",
                         "プライバシー", "おすすめのアカウントを非表示", "プロフィールとメッセージのおすすめアカウント欄を非表示にします。",
                         "ストーリートレイを非表示", "メッセージのストーリー欄と作成ボタンを非表示にします。",
-                        "起動時に最初の動画を一時停止", "起動時に「おすすめ」の最初の動画を一時停止します。");
+                        "起動時に最初の動画を一時停止", "起動時に「おすすめ」の最初の動画を一時停止します。",
+                        "AIラベル付きの投稿を非表示", "TikTokがAI生成と表示する投稿を非表示にします。");
             default:
                 return new ModStrings(Locale.ENGLISH, "Mod settings", "Feed", "Hide ads",
                         "Filters posts identified as ads.", "Ads filtered this session  ·  %,d",
@@ -140,7 +147,8 @@ final class ModStrings {
                         "Show video seekbar", "Drag the bar to move forward or backward in videos.",
                         "Privacy", "Hide suggested accounts", "Hides the suggested accounts section in Profile and Inbox.",
                         "Hide story tray", "Hides the stories row and Create button in Inbox.",
-                        "Pause first video on launch", "Pauses the first For You video at startup.");
+                        "Pause first video on launch", "Pauses the first For You video at startup.",
+                        "Hide AI-labeled posts", "Hides posts that TikTok labels as AI-generated.");
         }
     }
 

@@ -28,7 +28,7 @@ jobs:
           grep -Fx "version = $version" gradle.properties
           bash gradlew :patches:buildAndroid :patches:generatePatchesList
           test -s "patches/build/libs/patches-$version.mpp"
-          jq -e --arg version "$version" '.version == $version and (.patches | length == 10)' patches-list.json
+          jq -e --arg version "$version" '.version == $version and (.patches | length == 11)' patches-list.json
       - name: Publish release and refresh catalog
         env:
           GH_TOKEN: ${{ github.token }}

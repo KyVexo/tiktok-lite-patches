@@ -22,7 +22,8 @@ public final class FeedFilter {
         boolean hideAds = ModSettings.hideAds();
         boolean hideLive = ModSettings.hideLive();
         boolean hidePhotos = ModSettings.hidePhotoPosts();
-        if (!hideAds && !hideLive && !hidePhotos) return items;
+        boolean hideAi = ModSettings.hideAiLabeledPosts();
+        if (!hideAds && !hideLive && !hidePhotos && !hideAi) return items;
 
         ArrayList<Object> filtered = new ArrayList<>(items.size());
         int removedAds = 0;
@@ -34,10 +35,17 @@ public final class FeedFilter {
             if (hideLive && isLivePost(item)) continue;
             if (hidePhotos && read(item, "getPhotoModeImageInfo") != null) continue;
             if (hidePhotos && Boolean.TRUE.equals(read(item, "isPhotoMode"))) continue;
+            if (hideAi && isAiLabeled(item)) continue;
             filtered.add(item);
         }
         if (removedAds > 0) REMOVED.addAndGet(removedAds);
         return filtered.size() == items.size() ? items : filtered;
+    }
+
+    private static boolean isAiLabeled(Object item) {
+        Object label = readField(read(item, "getAigcInfo"), "aigcLabelType");
+        // TikTok Lite 47.8.2 recognizes label types 1 and 2 as explicit AIGC disclosures.
+        return Integer.valueOf(1).equals(label) || Integer.valueOf(2).equals(label);
     }
 
     private static boolean isLivePost(Object item) {

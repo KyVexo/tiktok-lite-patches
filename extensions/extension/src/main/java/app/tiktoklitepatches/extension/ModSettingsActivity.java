@@ -81,20 +81,28 @@ public final class ModSettingsActivity extends Activity {
     private void showSettings() {
         LinearLayout page = page(strings.get(SETTINGS));
 
-        if (ModSettings.feedFilterAvailable()) {
+        boolean feedFilterAvailable = ModSettings.feedFilterAvailable();
+        boolean aiFilterAvailable = ModSettings.aiFilterAvailable();
+        if (feedFilterAvailable || aiFilterAvailable) {
             LinearLayout feed = settingsCard(page, strings.get(FEED));
-            addSwitch(feed, strings.get(HIDE_ADS), strings.get(ADS_DESCRIPTION),
-                    ModSettings.ADS, ModSettings.hideAds());
-            TextView count = dialogText(strings.get(ADS_COUNT, FeedFilter.removedCount()),
-                    13, muted, false);
-            count.setPadding(0, dp(12), 0, 0);
-            feed.addView(count);
-            if (ModSettings.liveFilterAvailable()) {
-                addSwitch(feed, strings.get(HIDE_LIVE), strings.get(LIVE_DESCRIPTION),
-                        ModSettings.LIVE, ModSettings.hideLive());
+            if (feedFilterAvailable) {
+                addSwitch(feed, strings.get(HIDE_ADS), strings.get(ADS_DESCRIPTION),
+                        ModSettings.ADS, ModSettings.hideAds());
+                TextView count = dialogText(strings.get(ADS_COUNT, FeedFilter.removedCount()),
+                        13, muted, false);
+                count.setPadding(0, dp(12), 0, 0);
+                feed.addView(count);
+                if (ModSettings.liveFilterAvailable()) {
+                    addSwitch(feed, strings.get(HIDE_LIVE), strings.get(LIVE_DESCRIPTION),
+                            ModSettings.LIVE, ModSettings.hideLive());
+                }
+                addSwitch(feed, strings.get(HIDE_PHOTO_POSTS), strings.get(PHOTO_POSTS_DESCRIPTION),
+                        ModSettings.PHOTO_POSTS, ModSettings.hidePhotoPosts());
             }
-            addSwitch(feed, strings.get(HIDE_PHOTO_POSTS), strings.get(PHOTO_POSTS_DESCRIPTION),
-                    ModSettings.PHOTO_POSTS, ModSettings.hidePhotoPosts());
+            if (aiFilterAvailable) {
+                addSwitch(feed, strings.get(HIDE_AI_LABELED), strings.get(AI_LABELED_DESCRIPTION),
+                        ModSettings.AI_LABELED_POSTS, ModSettings.hideAiLabeledPosts());
+            }
         }
 
         if (ModSettings.cleanDownloadsAvailable()) {
